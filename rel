@@ -1,0 +1,1 @@
+scp build/war/ef.war muse.stanford.edu:apache-tomcat-7.0.14/webapps/80friends.war

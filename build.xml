@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="ef" default="war" basedir=".">
+
+	<description>
+        PRPL application build script
+    </description>
+	<!-- set global properties for this build -->
+	<property name="src.dir" location="src" />
+	<property name="src.java.dir" location="${src.dir}" />
+	<property name="src.jsp.dir" location="WebContent" />
+	<property name="src.js.dir" location="WebContent" />
+	<property name="src.html.dir" location="${src.dir}/html" />
+	<property name="config.files.dir" location="config" />
+	<property name="build.dir" location="build" />
+	<property name="build.classes.dir" location="${build.dir}/classes" />
+	<property name="build.jar.file" location="${build.dir}/jar/ef.jar" />
+	<property name="build.jar.dir" location="${build.dir}/jar" />
+	<property name="build.war.dir" location="${build.dir}/war" />
+	<property name="build.ef.war" location="${build.war.dir}/ef.war" />
+	<property environment="env" />
+
+	<property name="doc.dir" location="doc" />
+	<property name="javadoc.dir" location="${doc.dir}/api" />
+	<property name="webinf.lib.dir" location="WebContent/WEB-INF/lib" />
+	<property name="webinf.classes.dir" location="WebContent/WEB-INF/classes" />
+    <property name="tmpdir" value="${java.io.tmpdir}/${user.name}/${ant.project.name}" />
+	<property name="debug" value="true" />
+
+	<target name="init">
+		<!-- Create the time stamp -->
+		<tstamp />
+		<!-- Create the build directory structure used by compile -->
+		<mkdir dir="${build.dir}" />
+	</target>
+
+	<path id="lib.path">
+		<fileset dir="${webinf.lib.dir}" includes="*.jar" />
+	</path>
+
+	<target name="clean" description="clean up">
+		<!-- Delete the ${build.dir} directory tree -->
+		<delete dir="${build.dir}" />
+		<delete dir="${build.war.dir}" />
+	</target>
+
+	<target name="javadoc">
+		<mkdir dir="${javadoc.dir}" />
+		<javadoc sourcepath="${src.java.dir}" destdir="${javadoc.dir}" classpathref="lib.path" />
+	</target>
+
+	<target name="clean-javadoc">
+		<delete dir="${javadoc.dir}" />
+	</target>
+
+	<target name="build" depends="init" description="compile the source ">
+		<!-- Compile the java code from ${src} into ${build} -->
+		<mkdir dir="${build.classes.dir}" />
+		<javac destdir="${build.classes.dir}" classpathref="lib.path" debug="${debug}" target="1.5">
+			<src location="${src.java.dir}" />
+		</javac>
+	</target>
+
+	<!-- build a jar with the ef code. this goes into the webapp's web-inf/lib -->
+    <!-- don't want jetty launcher classes in ef.jar -->
+	<target name="jar" depends="build" description="generate the distribution">
+		<mkdir dir="${build.jar.dir}" />
+		<jar jarfile="${build.jar.file}" basedir="${build.dir}/classes" />
+	</target>
+
+	<!-- build war for ef webapp: includes ef jar, other jars, jsp's -->
+	<target name="war" depends="jar">
+		<mkdir dir="${build.war.dir}/work/WEB-INF/lib" />
+		<mkdir dir="${build.war.dir}/work/WEB-INF/classes" />
+		<!-- copy all libs to WEB-INF/lib -->
+		<copy todir="${build.war.dir}/work/WEB-INF/lib">
+			<fileset dir="${webinf.lib.dir}" includes="*.jar" />
+		</copy>
+		<!-- copy ef jar -->
+		<copy todir="${build.war.dir}/work/WEB-INF/lib">
+			<fileset dir="${build.jar.dir}" includes="ef.jar" />
+		</copy>
+		<!-- copy jsp's -->
+		<copy todir="${build.war.dir}/work">
+			<fileset dir="${src.jsp.dir}"/> <!-- don't copy all web-inf/lib, omit some libs, see above -->
+		</copy>
+		<!-- copy files in WEB-INF/classes (mainly log4j properties) -->
+		<copy todir="${build.war.dir}/work/WEB-INF/classes">
+			<fileset dir="${webinf.classes.dir}" includes="*" />
+		</copy>
+		<!-- build war -->
+		<jar jarfile="${build.ef.war}" basedir="${build.war.dir}/work" />
+	</target>
+
+</project>

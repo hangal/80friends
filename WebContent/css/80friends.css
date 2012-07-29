@@ -1,0 +1,23 @@
+button, body {
+	font-family:"Myriad Pro", Calibri, Georgia, Verdana;
+	line-height:1.6em
+}
+
+body {
+	background-color:#ddd;
+    background-size: 7px 7px;
+    background-image:-webkit-linear-gradient(0deg, rgba(255, 255, 255, .2) 50%, transparent 50%, transparent);
+}
+
+#map {
+	border: solid 1px rgba(0,0,0,0.2);
+}
+
+button {
+	font-size:16pt; font-weight:bold; background-color:#69AA35; color: white;
+}
+button:hover { border: 3px solid white; }
+
+#footer, #footer a {margin-top:-10px; font-size:10pt; color:gray; text-decoration:none}
+
+#footer a:hover {text-decoration: underline;}
