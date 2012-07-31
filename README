@@ -1,0 +1,3 @@
+Run ant to build build/war/80friends.war
+which can be deployed in any servlet container.
+Mongodb must be running on the same machine.

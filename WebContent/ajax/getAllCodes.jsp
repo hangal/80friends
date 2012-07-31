@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="application/x-javascript; charset=UTF-8"%>
+<%@ page language="java" contentType="application/json; charset=UTF-8"%>
 <%@page language="java" import="java.util.*"%>
 <%@page language="java" import="com.google.gson.*"%>
 <%@page language="java" import="org.json.*"%>
