@@ -3,7 +3,6 @@
  <html>
     <head>
     <title>80 friends</title>
-    <link rel="icon" type="image/png" href="../images/muse-favicon.png"/>
     <link rel="stylesheet" type="text/css" href="css/80friends.css"/>
  	<link rel="icon" type="image/png" href="images/globe.png" />
  

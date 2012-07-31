@@ -60,7 +60,14 @@
 	String descr = n_countries + " " + (n_countries > 1 ? "countries":"country");
 	String message = "I am connected to " + descr + " through Facebook. What\\'s your score?";
 %>	
-<a href="#" onclick="postToFeed()">Invite your friends</a>
+<hr/>
+
+<div style="position:relative">
+<button style="left:560px" onclick="postToFeed()">Invite your friends&nbsp;&nbsp;&nbsp;&rarr;</button>
+</div>
+<br>
+<br/>
+<br/>
 
 
 	<script type="text/javascript">
@@ -86,7 +93,7 @@
         // calling the API ...
         var obj = {
           method: 'feed',
-          link: 'http://bit.ly/80friends/',
+          link: 'http://bit.ly/80friends',
           picture: 'http://muse.stanford.edu:8080/80friends/images/globe.png',
           name: 'Around the World with 80 Friends',
           caption: 'Make connections around the world',
