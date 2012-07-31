@@ -28,12 +28,15 @@
   </script>
 
 	<h1>Around the World with 80 Friends</h1> 
-      <button id="map_button" style="" onclick="doFBStuff()">Build your map &nbsp;&nbsp;&nbsp;&rarr;</button>
+      <button id="map_button" style="" onclick="see_map_handler()">Build your map &nbsp;&nbsp;&nbsp;&rarr;</button>
 	<div id="fb_status">
 	</div>
 	<div id="refresh_icon" style="display:none"><img style="padding:5px" title="Refresh" src="images/refresh.png"></div>
 	<div id="countries">&nbsp;</div>  	
 	<div id="map"></div>
+	<div style="position:relative">
+	<br/><button id="compare_button" style="width:275px;left:525px;display:none;top:10px">Compare with others&nbsp;&nbsp;&nbsp;&rarr;</button>
+	</div>
 	<div id="absent_countries"></div>
 
 	<div style="position:relative">
@@ -67,6 +70,7 @@
 	     
 	     // show footer only after map is available, otherwise the footer appears briefly at the top of the page
 	     $('#footer').fadeIn();
+	 //    doFBStuff();
 		}
 		
 	</script>

@@ -37,13 +37,14 @@ public class MongoUtils {
 			db = m.getDB("test");
 
 			//ensure indexes on the cols that are perf critical
-			BasicDBList fieldsList = new BasicDBList();
-			fieldsList.clear(); fieldsList.add("f1"); fieldsList.add("f2"); db.getCollection("friends").ensureIndex(fieldsList);
-			fieldsList.clear(); fieldsList.add("id"); db.getCollection("needs").ensureIndex(fieldsList); // needs doesn't need index on code i think?
-			fieldsList.clear(); fieldsList.add("id"); fieldsList.add("code"); db.getCollection("locations").ensureIndex(fieldsList);
-			fieldsList.clear(); fieldsList.add("id"); db.getCollection("names").ensureIndex(fieldsList);
+			BasicDBObject o;
 
-		} catch (Exception e) { System.err.println ("Unable to connect to Mongo"); }
+			o = (BasicDBObject) com.mongodb.util.JSON.parse("{f1:1,f2:1}");	db.getCollection("friends").ensureIndex(o);
+			o = (BasicDBObject) com.mongodb.util.JSON.parse("{id:1}"); db.getCollection("needs").ensureIndex(o); // needs doesn't need index on code i think?
+			o = (BasicDBObject) com.mongodb.util.JSON.parse("{id:1,code:1}"); db.getCollection("locations").ensureIndex(o);
+			o = (BasicDBObject) com.mongodb.util.JSON.parse("{id:1}"); db.getCollection("names").ensureIndex(o);
+
+		} catch (Exception e) { System.err.println ("Unable to initialize Mongo"); }
 	}
 
 	/** #friends this user has */

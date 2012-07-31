@@ -16,12 +16,7 @@
 	if (my_id != null && my_id.equals(id))
 		MongoUtils.wipeDataForId(my_id);
 
-	if (my_id != null)
-		session.setAttribute("my_id", my_id);
-//	System.out.println ("json for " + name + " = " + json);
-	
-
-			MongoUtils.setName(id, name);
+	MongoUtils.setName(id, name);
 	
 	try {
 		JSONObject about = o.getJSONObject("about");

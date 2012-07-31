@@ -80,16 +80,6 @@
   		return s;
   	};
   	
-      window.fbAsyncInit = function() {
-	          FB.init({
-	        	  appId: ((window.location.hostname.indexOf('localhost') >= 0) ? '345533228861202' : '427320467320919'), // first is test app on localhost, second for muse.stanford.edu
-	            //  auth_response: auth,
-	              status     : true, 
-	              cookie     : true,
-	              xfbml      : true,
-	              oauth      : true,
-	            });
-      };
       
       var N_FRIENDS = 0; // tmp throttle
       var MAX_FRIENDS = 10000;
@@ -282,7 +272,7 @@
     		$('#fb_status').html('Uh, oh. Looks like you need more friends.');
 
     	$('#map_button').css('background-color', 'gray');
-		$("#absent_countries").append('<br/><hr/><h1>We&quot;ll look for friends in</h1>')
+		$("#absent_countries").append('<br/><hr/><h1>No connections to</h1>')
 		LOG (ALL_CODES.length + ' countries');
 		for (var i = 0; i < ALL_CODES.length; i++)
 		{
@@ -296,6 +286,9 @@
 		}
 		$('#match_button').fadeIn();
 		$('#match_button').click(function() { return show_matches(); });
+		$('#compare_button').fadeIn();
+		$('#compare_button').click(function() { window.location = "leaderboard"; });
+
 		$('#absent_countries img').click (function(e) { 
 			var target = e.target; 
 			$(target).next().html(''); // fade out spaces after this image too
@@ -331,7 +324,7 @@
     	fetch_user_details(MY_ID, 'me'); // this will also kick off fetching friends details
     }
 
-    function onLogin(response) {
+    function onLogin() {
     	reset_map_data();
     	MY_ID = FB.getUserID(); // this can't be null
     	
@@ -356,6 +349,23 @@
     		});
     } // end of login response
         
+    function see_map_handler() {
+    	FB.login(onLogin, 
+    			{scope:'email,user_checkins,user_likes,user_hometown,friends_hometown,user_location,friends_location,user_work_history,friends_work_history,user_education_history,friends_education_history,user_activities,friends_activities'});	       
+    }
+    
+    window.fbAsyncInit = function() {
+        FB.init({
+      	  appId: ((window.location.hostname.indexOf('localhost') >= 0) ? '345533228861202' : '427320467320919'), // first is test app on localhost, second for muse.stanford.edu
+          //  auth_response: auth,
+            status     : true, 
+            cookie     : true,
+            xfbml      : true,
+            oauth      : true,
+          });
+        doFBStuff();
+    };
+    
     function doFBStuff() {
     	// default ajax error processing
     	$(document).ajaxError (function() { $("#fb_status").html (' (<span style="color:red">Ah, an error occured. Sorry!</span>)'); });
@@ -368,7 +378,19 @@
     				CODE_TO_DESCR[ALL_CODES[i].code] = ALL_CODES[i].descr;
     		}
     		});
-    	FB.login(onLogin, 
-    			{scope:'email,user_checkins,user_likes,user_hometown,friends_hometown,user_location,friends_location,user_work_history,friends_work_history,user_education_history,friends_education_history,user_activities,friends_activities'});	       
+    	
+    	FB.getLoginStatus(function(response) {
+    		  if (response.status === 'connected') {
+    		    // the user is logged in and has authenticated your
+    		    // app, and response.authResponse supplies
+    		    // the user's ID, a valid access token, a signed
+    		    // request, and the time the access token 
+    		    // and signed request each expire
+    			onLogin();
+    		  } else if (response.status === 'not_authorized') {
+    		    // the user is logged in to Facebook, 
+    		    // but has not authenticated your app
+    		  }
+    	});
     };
   
