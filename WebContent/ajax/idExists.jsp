@@ -13,7 +13,7 @@
 	
 	// therefore switched to official printing via jsonobject
 	JSONObject j = new JSONObject();
-	j.put("id_exists", true);
+	j.put("id_exists", id_exists);
 	j.put("name", name);
 	out.println (j.toString());
 %>

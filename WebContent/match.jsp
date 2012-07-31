@@ -39,7 +39,7 @@
 	<div style="text-align:center">Happy friending!</div>
 	 
 	<% } else { %>
-	Yay! We found the following matches for you:<p>
+	Yay! We found the following possible matches for you:<p>
 	<%
 	// note: we are prohibited from offering to make friends directly 
 		for (Match m: matches) {

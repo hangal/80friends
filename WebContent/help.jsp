@@ -31,11 +31,18 @@ Of course, this information is not always entered by everyone. Therefore our est
 <p>
 2. You can see a leaderboard of the number of countries that each person in your network is connected to. 
 The leaderboard only shows people in your network who have installed this application.
+Invite your friends to join the app to see where they stand on the leaderboard.
 
 <p>
-3. Most importantly, 80 Friends will pair up people who need a connection to each other's countries. 
-If you form new friendships since you last visited the page, click the refresh button when you revisit the map.
+3. Most importantly, 80 Friends will help pair up people from different countries. On the matches page,
+you can see other people who have also used the 80 Friends app and need a connection to your country.
+If you form new friendships, click the refresh button when you revisit the map.
 
+We recommend that you first check the profile of the other person, and if appropriate, send them an introductory
+message saying you found them using 80 friends. You might explain that you would like to connect with them in the spirit of
+being pen friends and exchanging cultural perspectives.
+
+<p>
 The site <a href="http://peace.facebook.com">Peace on Facebook</a>
 charts the number of friendships being formed between antagonistic groups or countries. 
 We'd like to go a step further and help people form these friendships.

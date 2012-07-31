@@ -47,7 +47,7 @@
 		
 		out.println ("<div style=\"float:left;width:450px;font-size:10pt;margin-left:50px;\">");
 		int num = p.allLocs.size();
-		out.println ("<span style=\"color:gray\">Connected to " + num + " " + ((num > 1) ? "countries":"country") + "</span>");
+		out.println ("<span style=\"color:gray\">Connected to " + num + " " + ((num != 1) ? "countries":"country") + "</span>");
 		out.println ("<br/>");
 		for (String code: p.allLocs)
 			out.println (Countries.getCountryAsHtml(code, null /* no id needed */));
@@ -101,7 +101,16 @@
         };
 
         function callback(response) {
-          document.getElementById('msg').innerHTML = "Post ID: " + response['post_id'];
+        	// ideally we should check if the user pressed cancel instead of share.
+        	// See http://developers.facebook.com/docs/reference/dialogs/feed/
+        	$.ajax ({  
+        		url: '/80friends/ajax/log.jsp',
+        		type: 'POST',
+        		data: {id:FB.getUserID(), message: 'Posted to feed'},
+        		dataType:'json',
+        		success: function(resp) { 
+        		}
+        	});
         }
 
         FB.ui(obj, callback);
