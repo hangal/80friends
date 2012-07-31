@@ -68,6 +68,6 @@ public class PersonInfo implements Comparable<PersonInfo>{
 	
 	public String toString()
 	{
-		return "Info for " + this.name;
+		return "Info for " + this.name + ": " + allLocs.size() + " countries";
 	}
 }

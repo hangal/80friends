@@ -271,15 +271,13 @@
     	else
     		$('#fb_status').html('Uh, oh. Looks like you need more friends.');
 
-    	$('#map_button').css('background-color', 'gray');
-		$("#absent_countries").append('<br/><hr/><h1>No connections to</h1>')
+    	$("#absent_countries").html('<br/><hr/><h1>No connections to</h1>')
 		LOG (ALL_CODES.length + ' countries');
 		for (var i = 0; i < ALL_CODES.length; i++)
 		{
 			var code = ALL_CODES[i].code;
 			if (typeof CODES_TO_PEOPLE[code] == 'undefined')
 			{
-				LOG ('new code: ' + code);
 				// no fadein effect here because there are many countries and they are all displayed rapidly
 				$("#absent_countries").append ('<img style="height:13px" id="' + ALL_CODES[i].code + '" title="' + ALL_CODES[i].descr + '" src="http://flagpedia.net/data/flags/mini/' + ALL_CODES[i].code.toLowerCase() + '.png"/> ' + ' &nbsp;&nbsp; ');
 			}
@@ -307,7 +305,7 @@
     function populate_friends_anew() {
     	// wipe out stuff in case it already existed, and the user pressed refresh
     	$('#countries').html('');
-    	
+
     	/*
     	// initialize status area with space for 10 images
     	var n_images = 10;
@@ -318,6 +316,9 @@
     	$('#fb_status').html(html);
     	*/
     	$('#absent_countries').html('');
+    	$('#compare_button').hide();
+    	$('#match_button').hide();
+    	
     	reset_map_data();
     	refresh_map();
     	
@@ -327,7 +328,8 @@
     function onLogin() {
     	reset_map_data();
     	MY_ID = FB.getUserID(); // this can't be null
-    	
+    	$('#map_button').fadeOut();
+
     	$.ajax (
     		{url:'/80friends/ajax/saveId.jsp?id=' + MY_ID,
         		type:'GET',
@@ -341,6 +343,9 @@
     		type:'GET',
     		dataType: 'json',
     		success: function(resp) {
+       			MY_NAME = resp.name;
+       		    $('#top_right').html('<img src=\"http://graph.facebook.com/' + MY_ID + '/picture\"/>');
+//    	    	$('#top_right').append('<br/>' + MY_NAME);
         		if (resp.id_exists)
         			populate_existing_friends();
         		else
@@ -387,10 +392,15 @@
     		    // request, and the time the access token 
     		    // and signed request each expire
     			onLogin();
+    		  } else {
+    		    	$('#map_button').fadeIn();
+    		  }
+    		  /*
     		  } else if (response.status === 'not_authorized') {
     		    // the user is logged in to Facebook, 
     		    // but has not authenticated your app
     		  }
+    		  */
     	});
     };
   

@@ -8,7 +8,7 @@
 <html>
     <head>
       <title>80 friends</title>
-    <link rel="icon" type="image/png" href="../images/muse-favicon.png"/>
+ 	<link rel="icon" type="image/png" href="images/globe.png" />
     <link rel="stylesheet" type="text/css" href="css/80friends.css"/>
     <script type='text/javascript' src='https://www.google.com/jsapi'></script>
  	<link rel="icon" type="image/png" href="images/globe.png" />
@@ -41,6 +41,7 @@
 	<% } else { %>
 	Yay! We found the following matches for you:<p>
 	<%
+	// note: we are prohibited from offering to make friends directly 
 		for (Match m: matches) {
 			out.println ("<div style=\"text-align:center;font-size:10pt;margin-left:150px;float:left;width:180px\"><a href=\"http://facebook.com/" + m.id1 + "\"><img src=\"http://graph.facebook.com/" + m.id1 + "/picture\"/><br/>" + m.name1 + "</a><br/>");
 			for (String s: m.id1_locs)

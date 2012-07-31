@@ -5,7 +5,7 @@
 <% 
 	String id = request.getParameter("id");
 	boolean id_exists = MongoUtils.haveIdInFriendsTable(id);
-	
+	String name = MongoUtils.getNameForId(id);	
 	// somehow to get the below to work with jq ajax json, I have to use double quotes around id_exists and no quotes around 'true' - jq json parsing appears to be very finnicky
 	//String x = "{\"id_exists\": " + (id_exists ? "true":"false") + "}";
 	//out.println (x);
@@ -14,5 +14,6 @@
 	// therefore switched to official printing via jsonobject
 	JSONObject j = new JSONObject();
 	j.put("id_exists", true);
+	j.put("name", name);
 	out.println (j.toString());
 %>

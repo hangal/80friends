@@ -22,12 +22,13 @@
     <div style="background-color:white;padding:2% 10px 2% 10px">
 	<h1>Around the World with 80 Friends</h1>
 
-	The original version of this Facebook app was developed by <a href="http://cs.stanford.edu/~hangal">Sudheendra Hangal</a> during the <a href="http://www.change.org/about/hackforchange">Hack for Change hackathon</a> on July 28/29 in San Francisco. 
-	The app encourages Facebook users to make friends from as many different countries as possible. This is useful to form a grassroots social network through which information can spread; it is also useful
-	for people to have contacts with their counterparts in other countries. 
+	This Facebook app was developed by <a href="http://cs.stanford.edu/~hangal">Sudheendra Hangal</a> during the <a href="http://www.change.org/about/hackforchange">Hack for Change hackathon</a> on July 28/29 in San Francisco. 
+	The app encourages Facebook users to make friends from as many different countries as possible, and helps them find friends from other countries. It is motivated by the observation that a lot of news spreads
+	on social networks these days. Therefore diversity in social networks can democratize the dissemination of information across borders and promote understanding.
 	
 	<p>
 	The code for this app is available at <a href="https://github.com/hangal/80friends">https://github.com/hangal/80friends.</a>	
+	Collaborators are welcome.
 	</div>
 <hr/>
 <%@include file="footer.jsp"%>

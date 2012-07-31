@@ -8,7 +8,7 @@
 <html>
     <head>
       <title>80 friends</title>
-    <link rel="icon" type="image/png" href="../images/muse-favicon.png"/>
+ 	<link rel="icon" type="image/png" href="images/globe.png" />
     <link rel="stylesheet" type="text/css" href="css/80friends.css"/>
     <script type='text/javascript' src='https://www.google.com/jsapi'></script>
  	<link rel="icon" type="image/png" href="images/globe.png" />
@@ -18,10 +18,13 @@
 	<script src="js/80f.js"></script>
     </head>
     <body style="margin-left:5%;margin-right:5%">
+    
+    <div id="fb-root"></div>
+    
     <div style="padding-top:20px;margin:auto;width:800px;position:relative">
     <div style="background-color:white;padding:2% 10px 2% 10px">
 	<h1>Around the World with 80 Friends<br/>
-	<span style="font-size:50%">Leaderboard</span> </h1>
+	<span style="font-size:50%">Leaderboard in your network</span> </h1>
 
 <%
 	String id = request.getParameter("id");
@@ -31,15 +34,72 @@
 	int idx = 0;
 	for (PersonInfo p: members)
 	{
-		out.println ("<hr style = ><div style=\"float:left;width:150px;font-size:30pt\"><span style=\"color:gray\">" + (++idx) + "</div>");
-		out.println ("<div style=\"text-align:center;font-size:10pt;margin-left:150px;float:left;width:150px\"><a href=\"http://facebook.com/" + p.id + "\"><img src=\"http://graph.facebook.com/" + p.id + "/picture\"/><br/>" + p.name + "</a><br/>");
+		out.println ("<hr/>");
+
+		// 3 parts to each entry: rank, 
+		out.println ("<div style=\"float:left;width:50px;font-size:30pt;margin-top:10px\"><span style=\"color:gray\">" + (++idx) + "</div>");
+
+		out.println ("<div style=\"float:left;width:150px;text-align:center;font-size:10pt;margin-left:50px;\"><a href=\"http://facebook.com/" + p.id + "\"><img src=\"http://graph.facebook.com/" + p.id + "/picture\"/><br/>" + p.name + "</a><br/>");
 		Set<String> locs = p.ownLocs;
 		for (String code: locs)
 			out.println (Countries.getCountryAsHtml(code, null /* no id needed */));
 		out.println (" </div>  ");
+		
+		out.println ("<div style=\"float:left;width:450px;font-size:10pt;margin-left:50px;\">");
+		int num = p.allLocs.size();
+		out.println ("<span style=\"color:gray\">Connected to " + num + " " + ((num > 1) ? "countries":"country") + "</span>");
+		out.println ("<br/>");
+		for (String code: p.allLocs)
+			out.println (Countries.getCountryAsHtml(code, null /* no id needed */));
+		out.println (" </div>  ");
 		out.println (" <div style=\"clear:both\"></div>  ");
 	}
-%>
+	
+	PersonInfo p = PersonInfo.computePersonInfo(id);
+	int n_countries = p.allLocs.size();
+	String descr = n_countries + " " + (n_countries > 1 ? "countries":"country");
+	String message = "I am connected to " + descr + " through Facebook. What\\'s your score?";
+%>	
+<a href="#" onclick="postToFeed()">Invite your friends</a>
+
+
+	<script type="text/javascript">
+	(function(d) {
+        var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
+        js = d.createElement('script'); js.id = id; js.async = true;
+        js.src = "//connect.facebook.net/en_US/all.js";
+        d.getElementsByTagName('head')[0].appendChild(js);
+      })(document);
+	
+	  window.fbAsyncInit = function() {
+	        FB.init({
+	      	  appId: ((window.location.hostname.indexOf('localhost') >= 0) ? '345533228861202' : '427320467320919'), // first is test app on localhost, second for muse.stanford.edu
+	          //  auth_response: auth,
+	            status     : true, 
+	            cookie     : true,
+	            xfbml      : true,
+	            oauth      : true,
+	          });
+	    };
+	    
+    function postToFeed() {
+        // calling the API ...
+        var obj = {
+          method: 'feed',
+          link: 'http://bit.ly/80friends/',
+          picture: 'http://muse.stanford.edu:8080/80friends/images/globe.png',
+          name: 'Around the World with 80 Friends',
+          caption: 'Make connections around the world',
+          description: '<%=message%>'
+        };
+
+        function callback(response) {
+          document.getElementById('msg').innerHTML = "Post ID: " + response['post_id'];
+        }
+
+        FB.ui(obj, callback);
+      }
+    </script>
 	</div>
 <hr/>
 <%@include file="footer.jsp"%>

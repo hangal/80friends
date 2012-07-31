@@ -27,20 +27,29 @@
          })(document);
   </script>
 
+	<div style="float:left">
 	<h1>Around the World with 80 Friends</h1> 
-      <button id="map_button" style="" onclick="see_map_handler()">Build your map &nbsp;&nbsp;&nbsp;&rarr;</button>
-	<div id="fb_status">
+	</div>
+	<button id="map_button" style="display:none;top:340px;left:280px;font-size:27px;width:330px;height:60px" onclick="see_map_handler()">Build your map &nbsp;&nbsp;&nbsp;&rarr;</button>
+	<div id="top_right">
+	</div>
+	<div style="clear:both"></div>
+	
+    <div id="fb_status">
 	</div>
 	<div id="refresh_icon" style="display:none"><img style="padding:5px" title="Refresh" src="images/refresh.png"></div>
 	<div id="countries">&nbsp;</div>  	
 	<div id="map"></div>
 	<div style="position:relative">
-	<br/><button id="compare_button" style="width:275px;left:525px;display:none;top:10px">Compare with others&nbsp;&nbsp;&nbsp;&rarr;</button>
+		<br/>
+		<button id="compare_button" style="width:275px;left:525px;display:none;top:10px">Compare with others&nbsp;&nbsp;&nbsp;&rarr;</button>
+		<br/>
 	</div>
+
 	<div id="absent_countries"></div>
 
 	<div style="position:relative">
-	<br/><button id="match_button" style="display:none;top:10px">Look for friends &nbsp;&nbsp;&nbsp;&rarr;</button>
+	<br/><button id="match_button" style="display:none;top:10px">Find friends &nbsp;&nbsp;&nbsp;&rarr;</button>
 	</div>
 	
 	<div>&nbsp;</div>
