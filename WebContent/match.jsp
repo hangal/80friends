@@ -44,12 +44,12 @@
 		for (Match m: matches) {
 			out.println ("<div style=\"text-align:center;font-size:10pt;margin-left:150px;float:left;width:180px\"><a href=\"http://facebook.com/" + m.id1 + "\"><img src=\"http://graph.facebook.com/" + m.id1 + "/picture\"/><br/>" + m.name1 + "</a><br/>");
 			for (String s: m.id1_locs)
-				out.println ("<img style=\"height:13px\" id=\"" + s + "\" title=\"" + Countries.codeToCountry.get(s) + "\" src=\"http://flagpedia.net/data/flags/mini/" + s.toLowerCase() + ".png\"/> " + " &nbsp;&nbsp; ");
+				out.println (Countries.getCountryAsHtml(s));
 			out.println (" </div>  ");
 			out.println (" <div style=\"float:left;width:100px;position:relative;top:30px;border-top:1px solid rgba(127,127,127,0.5)\"></div>"); // div just for the line
 			out.println ("<div style=\"text-align:center;font-size:10pt;margin-left:30px;float:left;width:150px\"><a href=\"http://facebook.com/" + m.id2 + "\"><img src=\"http://graph.facebook.com/" + m.id2 + "/picture\"/><br/>" + m.name2 + "</a><br/>");
 			for (String s: m.id2_locs)
-				out.println ("<img style=\"height:13px\" id=\"" + s + "\" title=\"" + Countries.codeToCountry.get(s) + "\" src=\"http://flagpedia.net/data/flags/mini/" + s.toLowerCase() + ".png\"/> " + " &nbsp;&nbsp; ");
+				out.println (Countries.getCountryAsHtml(s));
 			out.println ("</div>");
 			out.println ("<div style=\"clear:both\"></div><br/>");
 	    }

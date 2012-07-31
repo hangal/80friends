@@ -23,6 +23,7 @@
 	<property name="javadoc.dir" location="${doc.dir}/api" />
 	<property name="webinf.lib.dir" location="WebContent/WEB-INF/lib" />
 	<property name="webinf.classes.dir" location="WebContent/WEB-INF/classes" />
+	<property name="webinf.dir" location="WebContent/WEB-INF/classes" />
     <property name="tmpdir" value="${java.io.tmpdir}/${user.name}/${ant.project.name}" />
 	<property name="debug" value="true" />
 
@@ -86,6 +87,9 @@
 		<!-- copy files in WEB-INF/classes (mainly log4j properties) -->
 		<copy todir="${build.war.dir}/work/WEB-INF/classes">
 			<fileset dir="${webinf.classes.dir}" includes="*" />
+		</copy>
+		<copy todir="${build.war.dir}/work/WEB-INF">
+			<fileset dir="${webinf.dir}" includes="*" />
 		</copy>
 		<!-- build war -->
 		<jar jarfile="${build.ef.war}" basedir="${build.war.dir}/work" />

@@ -27,15 +27,13 @@
 	String id = request.getParameter("id");
 	if (id == null)
 		id = (String) session.getAttribute("my_id");
-	Map<String, Collection<String>> map = MongoUtils.generateLeaderboard(id);
-	map = Util.sortMapByListSize(map);
+	List<PersonInfo> members = MongoUtils.generateLeaderboard(id);
 	int idx = 0;
-	for (String pid: map.keySet())
+	for (PersonInfo p: members)
 	{
-		String name = MongoUtils.getNameForId(pid);
 		out.println ("<hr style = ><div style=\"float:left;width:150px;font-size:30pt\"><span style=\"color:gray\">" + (++idx) + "</div>");
-		out.println ("<div style=\"text-align:center;font-size:10pt;margin-left:150px;float:left;width:150px\"><a href=\"http://facebook.com/" + id + "\"><img src=\"http://graph.facebook.com/" + id + "/picture\"/><br/>" + name + "</a><br/>");
-		Set<String> locs = MongoUtils.readFieldFromCollForSelector("locations", "id", pid, "code");
+		out.println ("<div style=\"text-align:center;font-size:10pt;margin-left:150px;float:left;width:150px\"><a href=\"http://facebook.com/" + p.id + "\"><img src=\"http://graph.facebook.com/" + p.id + "/picture\"/><br/>" + p.name + "</a><br/>");
+		Set<String> locs = p.ownLocs;
 		for (String code: locs)
 			out.println (Countries.getCountryAsHtml(code, null /* no id needed */));
 		out.println (" </div>  ");

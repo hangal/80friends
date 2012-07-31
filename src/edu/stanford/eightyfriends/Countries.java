@@ -186,13 +186,18 @@ public class Countries {
 		return null;
 	}
 
+    public static String getCountryAsHtml(String code)
+    {
+    	return getCountryAsHtml(code, null);
+    }
+    
     /* returns html for the country code */
     public static String getCountryAsHtml(String code, String id)
     {
     	String s = "<img class=\"flag\" ";
     	if (id != null)
     		s += "id=\"" + id + "\" ";
-    	s += "title=\"" + Countries.codeToCountry.get(code) + "\" ";
+    	s += "title=\"" + Countries.codeToCountry.get(code).toUpperCase() + "\" ";
     	s += "src=\"http://flagpedia.net/data/flags/mini/" + code.toLowerCase() + ".png\"/> ";
     	return s;
     }

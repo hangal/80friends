@@ -10,12 +10,12 @@ import com.google.gson.Gson;
 /** all info about a person */
 public class PersonInfo implements Comparable<PersonInfo>{
 
-	String id, name;
-	Set<String> ownLocs = new LinkedHashSet<String>(); // own locations
-	Map<String, Set<String>> locationToFriends = new LinkedHashMap<String, Set<String>>(); // map of country code -> all friends connected to that country 
-	Map<String, Set<String>> friendToLocations = new LinkedHashMap<String, Set<String>>();
-	Set<String> allLocs = new LinkedHashSet<String>(); // all locs, own + all friends
-	Map<String, String> friendIdToName = new LinkedHashMap<String, String>();
+	public String id, name;
+	public Set<String> ownLocs = new LinkedHashSet<String>(); // own locations
+	public Map<String, Set<String>> locationToFriends = new LinkedHashMap<String, Set<String>>(); // map of country code -> all friends connected to that country 
+	public Map<String, Set<String>> friendToLocations = new LinkedHashMap<String, Set<String>>();
+	public Set<String> allLocs = new LinkedHashSet<String>(); // all locs, own + all friends
+	public Map<String, String> friendIdToName = new LinkedHashMap<String, String>();
 	
 	private PersonInfo() { } // use factory method
 	
@@ -64,5 +64,10 @@ public class PersonInfo implements Comparable<PersonInfo>{
 	
 	public String toJson() {
 		return new Gson().toJson(this);
+	}
+	
+	public String toString()
+	{
+		return "Info for " + this.name;
 	}
 }

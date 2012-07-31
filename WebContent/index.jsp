@@ -30,16 +30,6 @@
 	<h1>Around the World with 80 Friends</h1> 
       <button id="map_button" style="" onclick="doFBStuff()">Build your map &nbsp;&nbsp;&nbsp;&rarr;</button>
 	<div id="fb_status">
-		<img style="height:25px" id="friend_pic0"/>
-		<img style="height:25px" id="friend_pic1"/>
-		<img style="display:none;height:25px" id="friend_pic2"/>
-		<img style="display:none;height:25px" id="friend_pic3"/>
-		<img style="display:none;height:25px" id="friend_pic4"/>
-		<img style="display:none;height:25px" id="friend_pic5"/>
-		<img style="display:none;height:25px" id="friend_pic6"/>
-		<img style="display:none;height:25px" id="friend_pic7"/>
-		<img style="display:none;height:25px" id="friend_pic8"/>
-		<img style="display:none;height:25px" id="friend_pic9"/>&nbsp;
 	</div>
 	<div id="refresh_icon" style="display:none"><img style="padding:5px" title="Refresh" src="images/refresh.png"></div>
 	<div id="countries">&nbsp;</div>  	

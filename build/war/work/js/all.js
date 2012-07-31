@@ -81,7 +81,7 @@
   	
       window.fbAsyncInit = function() {
 	          FB.init({
-	              appId      : '427320467320919',
+	        	  appId: ((window.location.hostname.indexOf('localhost') >= 0) ? '345533228861202' : '427320467320919'), // first is test app on localhost, second for muse.stanford.edu
 	            //  auth_response: auth,
 	              status     : true, 
 	              cookie     : true,
@@ -90,12 +90,26 @@
 	            });
       };
       
-      var fields = ['friends', 'locations']; // #checkins
+      var me_fields = ['friends', 'locations']; // #checkins
+      var other_fields = ['locations']; // #checkins
       var N_PEOPLE = 0; // tmp throttle
+      var MAX_PEOPLE = 10000;
+      try {
+    	  // see if a max= param is specified, should be at the end. 
+    	  // fragile, under hackathon time pressure!
+    	  var params = window.location.search;
+	      if (params && params.indexOf("max=") >= 0)
+	      {
+	    	  var idx =  params.indexOf("max=");
+	    	  MAX_PEOPLE = parseInt(params.substring(idx + "max=".length));
+	    	  LOG ("MAX_PEOPLE = " + MAX_PEOPLE);
+	      }
+      } catch (e) { }
+      
       var map_data = [['Country', 'Popularity']];
       var codes_to_people = {}; // code -> map (person -> 1) so that person's don't get repeated
       
-      function done_for_user(id, name, user_details) {
+      function done_for_user(me_real_id, my_name, id, name, user_details) {
 	          var json = JSON.stringify(user_details);
 	         // LOG(json);  	          
     	      LOG('friendName: ' +  name);
@@ -103,7 +117,7 @@
 			  {
 				  url: '/80friends/ajax/recorder.jsp',
 	        	  type: 'POST',
-	        	  data: { friendName: name, body: json},
+	        	  data: { my_id: me_real_id, my_name: my_name, id: id, friendName: name, body: json},
 	        	  success: function(response) { 
 	        		  response = trim(response);
 	        		  try { var resp = eval('(' + response + ')'); countries = resp.locations;}
@@ -140,51 +154,124 @@
 		        			       }]);
 		        			       
 	        					  chart.draw(view, CHART_OPTS);
-	        					  $("#countries").append (resp[i].descr + '&nbsp;&nbsp; ');
+	        					  $new = $('<span style="display:none"><img height:13px" title="' + resp[i].descr + '" src="http://flagpedia.net/data/flags/mini/' + resp[i].code.toLowerCase() + '.png"/> ' + ' &nbsp;&nbsp; </span>');
+	        					  $("#countries").append ($new);
+	        					  $new.fadeIn('slow'); // ease in nicely
 	        				  }
 	        			  }
 	        		  }
 
-	        		  if (id == 'me') {
+	        		  if (id == me_real_id) {
 	        			  friends_data = user_details.friends.data;  
 	        			  var message = '<br/>Now processing data for ' + friends_data.length + ' friends';
 	        			  LOG (message);
 	        			  $("#fb_status").append(message);
 	        		  }
 
-	        		  if (friends_data.length > 0) {
+	        		  if (friends_data.length > 0 && N_PEOPLE < MAX_PEOPLE) {
 	        			  // fire off the next lookup
 	        			  var friend = friends_data.shift();
-	        			  if (N_PEOPLE < 1000) {
-	        				  process_user(friend.id, friend.name); 
-	        				  N_PEOPLE++;
-	        			  }
+        				  process_user(friend.id, friend.name); 
+        				  N_PEOPLE++;
 	        		  }
-	    	         else
-		  	  	         $('#fb_status').html('Congratulations, you have friends from ' + Object.keys(codes_to_people).length + ' countries');
+	    	         else {
+	    	        	 var n_countries = Object.keys(codes_to_people).length;
+	    	        	 if (n_countries >= 2)
+	    	        		 $('#fb_status').html('Congratulations, you have connections to ' + n_countries + ' countries.');
+	    	        	 else
+	    	        		 $('#fb_status').html('Uh, oh. Looks like you need more friends.');
+	    	        	 show_uncovered_countries(me_real_id);
+	    	         }
 	    	     },
 	        	  error: function() { $("#fb_status").html (' (<span style="color:red">Ah, an error occured. Sorry!</span>)'); }
 	       	  });
       }
       
+      var me_real_id = '?', my_name = "?"; // we need to find me_real_id at some point, not just 'me'
+      
+      function show_uncovered_countries(id)
+      {
+    	  $('#map_button').css('background-color', 'gray');
+    	  $.ajax (
+    			  {
+    				  url: '/80friends/ajax/getAllCodes.jsp',
+    	        	  type: 'GET',
+    	        	  success: function(response) { 
+    	            	  $("#absent_countries").append('<br/><hr/><h1>We&quot;ll look for friends in</h1>')
+    	        		  response = trim(response);
+    	        		  try { var resp = eval('(' + response + ')'); }
+    	        		  catch (e) { LOG('error in evaluating muse response'); return; }
+    	        		  LOG (resp.length + ' countries');
+    	        		  for (var i = 0; i < resp.length; i++)
+    	        		  {
+	        				  var code = resp[i].code;
+	        				  if (typeof codes_to_people[code] == 'undefined')
+	        				  {
+	        					  LOG ('dont have ' + resp[i]);
+	        					  // no fadein effect here because there are many countries and they are all displayed rapidly
+	        					  $("#absent_countries").append ('<img style="height:13px" id="' + resp[i].code + '" title="' + resp[i].descr + '" src="http://flagpedia.net/data/flags/mini/' + resp[i].code.toLowerCase() + '.png"/> ' + ' &nbsp;&nbsp; ');
+	        				  }
+    	        		  }
+    					  $('#match_button').fadeIn();
+    					  $('#match_button').click(function() { return mark_friends_needed(id); });
+    					  $('#absent_countries img').click (function(e) { 
+    						  var target = e.target; 
+    						  $(target).next().html(''); // fade out spaces after this image too
+    						  $(target).fadeOut();
+    					});
+    	    	     },
+    	        	  error: function() { $("#fb_status").html (' (<span style="color:red">Ah, an error occured. Sorry!</span>)'); }
+    	       	  });
+      }
+      
+      function mark_friends_needed(id) {
+    	  var $x = $('#absent_countries img');
+    	  var url = 'match.jsp?id='+id;
+    	  for (var i = 0; i < $x.length; i++)
+    		  url += '&code=' + $($x[i]).attr('id');
+    	  window.location = url;
+    	  /*
+    	  LOG ('url = ' + url);
+    	  $.ajax (
+    			  {
+    				  url: url,
+    	        	  type: 'GET',
+    	        	  success: function(response) { 
+    	        		  alert ('Thanks for signing up!');
+    	        		  $('#match_button').css('background-color', 'gray'); // gray it out so people don't press it again and again
+    	    	     },
+    	        	  error: function() { $("#fb_status").html (' (<span style="color:red">Ah, an error occured. Sorry!</span>)'); }
+    	       	  });
+    	       	  */
+      }
+      
       function process_user (id, name) {
 			  LOG ('fetching id ' + id + ', ' + name);
-	          $("#fb_status").html('Looking up ' + name);
+	          $("#fb_status").html('Looking up ' + name + "...");
 
 			  var user = new Object();
-	          FB.api('/' + id, function(response) { user.about = response; });
-	          var  nReqs = fields.length;
 	          var nCompletedReqs = 0;
+	          var fields = (id == 'me' ? me_fields : other_fields);
+	          var  nReqs = fields.length + 1; // +1 for the /<id> call
+	      	  FB.api('/' + id, function(response) { 
+	        	  user.about = response;
+	        	  if (id == 'me') {
+	        		  me_real_id = id = user.about.id; // this can't be null
+	        		  my_name = user.about.name; // this can't be null
+	        	  }
+	        	  nCompletedReqs++; 
+	        	  if (nCompletedReqs == nReqs) 
+	        		  done_for_user(me_real_id, my_name, id, name, user); 
+          	  });
+	      	  
 	          for (var i = 0; i < fields.length; i++) {
 				var field = fields[i];
 				LOG ('field ' + field);
 	            FB.api('/' + id + '/' + field, function(f) { return function(response) { 
 	            	nCompletedReqs++;
-	            	LOG ('received field = ' + f); 
-
 	            	user[f] = response; 
 	            	if (nCompletedReqs == nReqs) 
-	            		done_for_user(id, name, user); 
+	            		done_for_user(me_real_id, my_name, id, name, user); 
 	            	};
 	            }(field));
 			}
@@ -194,6 +281,6 @@
 	        FB.login(function(response) {
 				process_user ('me', 'me');
 	        },
-			{scope:'user_checkins,user_likes,user_hometown,friends_hometown,user_location,friends_location,user_work_history,friends_work_history,user_education_history,friends_education_history,user_activities,friends_activities'});	       
+			{scope:'email,user_checkins,user_likes,user_hometown,friends_hometown,user_location,friends_location,user_work_history,friends_work_history,user_education_history,friends_education_history,user_activities,friends_activities'});	       
       };
       

@@ -1,6 +1,8 @@
 package edu.stanford.eightyfriends;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -152,24 +154,30 @@ public class MongoUtils {
 			generateMatches(id);
 	}	
 
-	public static Map<String, Collection<String>> generateLeaderboard(String id)
+	/** returns sorted list of person info's for the leaderboard */
+	public static List<PersonInfo> generateLeaderboard(String id)
 	{
 		Map<String, Collection<String>> result = new LinkedHashMap<String, Collection<String>>();
 
-		// read my needs
-		Collection<String> my_needs = readFieldFromCollForSelector("needs", "id", id, "code");
+		// read all my friends' locs
 		Set<String> friends = readFieldFromCollForSelector("friends", "f1", id, "f2");
 		friends.addAll(readFieldFromCollForSelector("friends", "f2", id, "f1"));
-		result.put (id, my_needs);
-
+		
+		List<PersonInfo> list = new ArrayList<PersonInfo>();
+		PersonInfo me = PersonInfo.computePersonInfo(id);
+		list.add(me);
+		
 		// and all my friends needs
-		for (String friend: friends) 
+		for (String friendID: friends) 
 		{
-			Set<String> needs = readFieldFromCollForSelector("needs", "id", friend, "code");
-			if (needs.size() > 0)
-				result.put (friend, needs);
-		}
-		return result;
+			if (!haveIdInFriendsTable(friendID))
+				continue;
+			
+			PersonInfo p = PersonInfo.computePersonInfo(friendID);
+			list.add(p);
+		}			
+		Collections.sort(list);
+		return list;
 	}
 	
 	public static void wipeDataForId(String id)
@@ -181,6 +189,9 @@ public class MongoUtils {
 		db.getCollection("needs").remove(o);
 		db.getCollection("locations").remove(o);
 		db.getCollection("names").remove(o);
+		
+		json = "{'f1':'" + id + "'}"; // id has to be in quotes
+		o = (BasicDBObject) com.mongodb.util.JSON.parse(json);
 		db.getCollection("friends").remove(o);
 	}
 

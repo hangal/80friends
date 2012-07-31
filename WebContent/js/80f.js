@@ -335,6 +335,13 @@
     	reset_map_data();
     	MY_ID = FB.getUserID(); // this can't be null
     	
+    	$.ajax (
+    		{url:'/80friends/ajax/saveId.jsp?id=' + MY_ID,
+        		type:'GET',
+        		dataType: 'json',
+        		success: function(resp) { } // don't do anything
+    		});
+
     	// check if id exists				 
     	$.ajax (
     		{url:'/80friends/ajax/idExists.jsp?id=' + MY_ID,
