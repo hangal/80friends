@@ -5,7 +5,6 @@
 <%
 	String json = request.getParameter("body");
 	JSONObject user_details = new JSONObject(json);
-	Location hometownCountry = null, locationCountry = null;
 	String my_id = request.getParameter("my_id");
 	String[] ids = request.getParameterValues("ids[]"), names = request.getParameterValues("friendNames[]");
 	String hid = "?", hname = "?";
@@ -21,6 +20,8 @@
 	
 	for (String id: ids)
 	{
+		Location hometownCountry = null, locationCountry = null;
+
 		String name = "?";
 		try {
 			JSONObject o = user_details.getJSONObject(id);
