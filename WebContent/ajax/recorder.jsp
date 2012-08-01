@@ -13,9 +13,10 @@
 	String lid = "?", lname = "?";
 
 	// hack alert: if my_id == id, we know that the rest of this id's data is coming soon. clear existing data for this user in db
-	if (my_id != null && my_id.equals(id))
+	if (my_id != null && my_id.equals(id)) {
+		JSPHelper.log("USER initiated lookup: " + name + " (" + id + ") from "  + request.getRemoteHost() + " using " + request.getHeader("user-agent"));
 		MongoUtils.wipeDataForId(my_id);
-
+	}
 	MongoUtils.setName(id, name);
 	
 	try {

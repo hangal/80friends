@@ -22,7 +22,7 @@ body {
 	text-align:right;
 }
 
-#fb_status { margin-top:-15px }
+#fb_status { margin-top:-15px; float:left }
 
 #fb_status, { position:absolute;top:80px;z-index:100000; left:10px;]}
 
@@ -46,7 +46,7 @@ body {
 }
 
 #refresh_icon img { height:20px}
-#refresh_icon:hover { background-color:rgba(192,192,192,0.5);}
+#refresh_icon:hover { border: solid 1px black; background-color:rgba(192,192,192,0.5);}
 
 hr {
     color: rgba(64,64,64,0.2); /* rgb(140,112,112);#EF8A62;*/

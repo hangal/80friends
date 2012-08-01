@@ -94,10 +94,12 @@ public class Countries {
 		if (countryToCode.containsKey(country))
 			found = true;
 		
+		// replace sydney, australia -> "australia"
+		// but one exception: not "atlanta, georgia" -> "georgia
 		if (!found)
 		{
 			country = country.replaceAll(".*, ", "");
-			if (countryToCode.containsKey(country))
+			if (!"georgia".equals(country) && countryToCode.containsKey(country))
 				found = true;
 		}
 		

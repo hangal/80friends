@@ -13,11 +13,30 @@
             s = s.substring(1);
         }
         return s;
+    };
+    
+    /* replacement for Object.keys since IE doesn't support it */
+    function own_keys(o) {
+    	var result = new Array();
+    	for (var f in o)
+        {
+            try {
+                if (!o.hasOwnProperty(f)) // only print properties directly attached this object, not fields in its ancestors
+                    continue;
+                if (typeof(o[f]) === 'function')
+                    continue;
+                else
+                	result.push(f);
+            } catch (e) {
+                muse.log ('exception trying to dump object field ' + f + ':' + e);
+            }
+        }
+    	return result;
     }
 
     function join_keys(o, max) {
     	// ellipsize beyond max
-    	var keys = Object.keys(o);
+    	var keys = own_keys(o);
     	var ellipsis = true;
     	if (keys.length < max)
     	{
@@ -81,26 +100,26 @@
   	};
   	
       
-      var N_FRIENDS = 0; // tmp throttle
-      var MAX_FRIENDS = 10000;
+	  var N_FRIENDS = 0; // tmp throttle
+	  var MAX_FRIENDS = 10000;
 	  // see if a max= param is specified, should be at the end. 
 	  // fragile, under hackathon time pressure!
-      try {
-    	  var params = window.location.search;
+	  try {
+		  var params = window.location.search;
 	      if (params && params.indexOf("max=") >= 0)
 	      {
 	    	  var idx =  params.indexOf("max=");
 	    	  MAX_FRIENDS = parseInt(params.substring(idx + "max=".length));
 	    	  LOG ("MAX_FRIENDS = " + MAX_FRIENDS);
 	      }
-      } catch (e) { }
-      
-      var MAP_DATA, CODES_TO_PEOPLE;
-      
-      function reset_map_data() {
-    	  MAP_DATA = [['Country', 'Popularity']];
-    	  CODES_TO_PEOPLE = {}; // code -> map (person -> 1) so that person's don't get repeated
-      }      
+	  } catch (e) { }
+	  
+	  var MAP_DATA, CODES_TO_PEOPLE;
+	  
+	  function reset_map_data() {
+		  MAP_DATA = [['Country', 'Popularity']];
+		  CODES_TO_PEOPLE = {}; // code -> map (person -> 1) so that person's don't get repeated
+	  }      
       
       function refresh_map() {
 	       data_table = google.visualization.arrayToDataTable(MAP_DATA);
@@ -178,7 +197,7 @@
 	    	         else {
 	    	        	 show_uncovered_countries();
 	    	         }
-	    	     },
+	    	     }
 	       	  });
       }
       
@@ -265,11 +284,11 @@
     	$('#refresh_icon').click(populate_friends_anew);
     	
     	// we're all done, no more lookups
-    	var n_countries = Object.keys(CODES_TO_PEOPLE).length;
+    	var n_countries = own_keys(CODES_TO_PEOPLE).length;
     	if (n_countries >= 2)
-    		$('#fb_status').html('Congratulations, you have connections to ' + n_countries + ' countries.');
+    		$('#fb_status').html('Congratulations, ' + MY_NAME + ', you have connections to ' + n_countries + ' countries.');
     	else
-    		$('#fb_status').html('Uh, oh. Looks like you need more friends.');
+    		$('#fb_status').html('Uh, oh. Looks like you need more connections.');
 
     	$("#absent_countries").html('<br/><hr/><h1>No connections to</h1>')
 		LOG (ALL_CODES.length + ' countries');
@@ -366,7 +385,7 @@
             status     : true, 
             cookie     : true,
             xfbml      : true,
-            oauth      : true,
+            oauth      : true
           });
         doFBStuff();
     };

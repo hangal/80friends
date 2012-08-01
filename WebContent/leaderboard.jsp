@@ -63,12 +63,16 @@
 <hr/>
 
 <div style="position:relative">
-<button style="left:560px" onclick="postToFeed()">Invite your friends&nbsp;&nbsp;&nbsp;&rarr;</button>
+<div style="float:left">
+	The global leader is <a href="http://www.facebook.com/leo.rong">Leo Rong</a> with 64 countries.
 </div>
-<br>
-<br/>
-<br/>
+<div style="float:right;width:250px;">
+	<button style="width:250px;top:0;left:auto" onclick="postToFeed()">Invite your friends&nbsp;&nbsp;&nbsp;&rarr;</button>
+</div>
+<div style="clear:both"></div>
 
+<br/>
+</div>
 
 	<script type="text/javascript">
 	(function(d) {
@@ -85,7 +89,7 @@
 	            status     : true, 
 	            cookie     : true,
 	            xfbml      : true,
-	            oauth      : true,
+	            oauth      : true
 	          });
 	    };
 	    
@@ -124,5 +128,6 @@
 $(document).ready(function() { 
     $('#footer').fadeIn();
 });</script>	
+
 </body>
 </html>

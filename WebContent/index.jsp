@@ -36,6 +36,8 @@
 	
     <div id="fb_status">
 	</div>
+	<div style="clear:both"></div>
+	
 	<div id="refresh_icon" style="display:none"><img style="padding:5px" title="Refresh" src="images/refresh.png"></div>
 	<div id="countries">&nbsp;</div>  	
 	<div id="map"></div>
