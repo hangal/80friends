@@ -22,14 +22,14 @@ body {
 	text-align:right;
 }
 
-#fb_status { margin-top:-15px; float:left }
+#fb_status { margin-top:-15px; float:left; height:25px }
 
 #fb_status, { position:absolute;top:80px;z-index:100000; left:10px;]}
 
 #countries {
 	/* do stuff to make this status appear within the map frame */
 	position:absolute;
-	top:90px;
+	top:10px;
 	z-index:1000000;
 	left:10px;
 	opacity:0.8;
@@ -39,7 +39,7 @@ body {
 #refresh_icon {
 	/* do stuff to make this status appear within the map frame */
 	position:absolute;
-	top:90px;
+	top:10px;
 	z-index:1000000;
 	right:5px;
 	opacity:1.0;

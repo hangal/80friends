@@ -55,7 +55,7 @@
     }
     
     function LOG(s) { if (typeof console != 'undefined' && console.log) console.log(s); }
-    var FRIENDS_DATA; // list of friend ids and names
+    var FRIENDS; // list of friend ids and names
     var ALL_CODES = [], CODE_TO_DESCR = {};
     
     var dump_obj = function (o, print_supertype_fields) {
@@ -98,9 +98,8 @@
   		
   		return s;
   	};
-  	
       
-	  var N_FRIENDS = 0; // tmp throttle
+	  var N_FRIENDS_COMPLETE = 0; // tmp throttle
 	  var MAX_FRIENDS = 10000;
 	  // see if a max= param is specified, should be at the end. 
 	  // fragile, under hackathon time pressure!
@@ -158,100 +157,89 @@
 					  CODES_TO_PEOPLE[code][name] = 1;
 					  MAP_DATA.push([code, 100]);
 					  refresh_map();
-					  $new = $('<span style="display:none"><img height:13px" title="' + CODE_TO_DESCR[resp[i].code] + '" src="http://flagpedia.net/data/flags/mini/' + resp[i].code.toLowerCase() + '.png"/> ' + ' &nbsp;&nbsp; </span>');
+					  $new = $('<span id="flag_' + code + '" style="display:none"><img height:13px" title="' + CODE_TO_DESCR[resp[i].code] + '" src="http://flagpedia.net/data/flags/mini/' + resp[i].code.toLowerCase() + '.png"/> ' + ' &nbsp;&nbsp; </span>');
 					  $("#countries").append ($new);
-					  $new.fadeIn('slow'); // ease in nicely
+					  $('#flag_' + code).fadeIn('slow'); // ease in nicely
 				  }
 			  }
 		  }
       }
       
-      /* user_details is an object with fields straight from FB */
-      function done_for_user(id, name, user_details) {
+      /* friends is an array of objects {id:.., name:..}. initially called with just one id, {id:MY_ID, name:'?"}
+       * user_details is an object with fields straight from FB */
+      function done_for_users(friends, user_details) {
 	          var json = JSON.stringify(user_details);
-	         // LOG(json);  	          
-    	      LOG('done for user friend: ' +  name);
-    	      
-    	      // record the data to recorder.jsp, it will return us a bunch of country code fields
+	    	  var names = $.map(friends, function(o) { return o.name; });
+			  var ids = $.map(friends, function(o) { return o.id; });
+    	      // record the data to recorder.jsp, it will return us a bunch of country code fields for each id
 	          $.ajax ({
 				  url: '/80friends/ajax/recorder.jsp',
 	        	  type: 'POST',
 	        	  dataType: 'json',
-	        	  data: { my_id: MY_ID, my_name: MY_NAME, id: id, friendName: name, body: json},
+	        	  data: { my_id: MY_ID, my_name: MY_NAME, ids: ids, friendNames: names, body: json},
 	        	  success: function(resp) {
-	        		  record_countries_for_friend(name, resp);
+	        		  // the resp is like {id: {... country data }, id2: {... }}
+	        		  for (var i = 0; i < ids.length; i++)
+	        			  record_countries_for_friend(names[i], resp[ids[i]]);
 	        		  
 	        		  // if my id, also pick up friends list
-	        		  if (id == MY_ID) {
-	        			  FRIENDS_DATA = user_details.friends.data;  
-	        			  var message = '<br/>Now processing data for ' + FRIENDS_DATA.length + ' friends';
+	        		  if (ids[0] == MY_ID) {
+	        			  FRIENDS = user_details[MY_ID].friends.data;  
+	        			  var message = '<br/>Now processing data for ' + FRIENDS.length + ' friends';
 	        			  LOG (message);
 	        		  }
 
-	        		  if (FRIENDS_DATA.length > 0 && N_FRIENDS < MAX_FRIENDS) {
-	        			  // fire off the next lookup
-	        			  var friend = FRIENDS_DATA.shift();
-        				  fetch_user_details(friend.id, friend.name); 
-        				  N_FRIENDS++;
+	        		  if (N_FRIENDS_COMPLETE >= MAX_FRIENDS || FRIENDS.length == 0) {
+	        			  // we're done fetching
+	        			  show_uncovered_countries();
+	        			  return;
 	        		  }
-	    	         else {
-	    	        	 show_uncovered_countries();
-	    	         }
+	        		  
+	        		  // assemble friends for this fetch
+	        		  var BATCH_SIZE = 20;
+        			  var tmp = [];
+	        		  for (var i = 0; i < BATCH_SIZE; i++) {	        			  
+	        			  if (N_FRIENDS_COMPLETE >= MAX_FRIENDS || FRIENDS.length == 0)
+	        				  break;
+	        			  tmp.push(FRIENDS.shift());
+	        			  N_FRIENDS_COMPLETE++; 
+	        		  }
+        		      fetch_users_details(tmp); 
 	    	     }
 	       	  });
       }
       
       var MY_ID = '?', MY_NAME = "?"; // we need to find me_real_id at some point, not just 'me'
-
-      function fetch_user_details (id, name) {
-		  LOG ('fetching id ' + id + ', ' + name);
-          //$("#fb_status").html('Looking up ' + name + "...");
-          
-	    	$('#fb_status').html('Looking up ' + name);
-/*
-		  if (id != MY_ID) {
-			  var slot_num = N_FRIENDS%10;
-			  var $pic = $($('.friend_pic')[slot_num]);
-			  $pic.attr('src', 'http://graph.facebook.com/' + id + '/picture');
-			  $pic.attr('title', name);
-			  $pic.fadeIn();
-		  }
-  */        
-		  var user = new Object();
-          var nCompletedReqs = 0;
-          var name = '';
-          
-          var me_fields = ['friends', 'locations']; // #checkins
-          var other_fields = ['locations']; // #checkins
-          var fields = (id == MY_ID ? me_fields : other_fields);
-          
-          var  nReqs = fields.length + 1; // +1 for the /<id> call
-          var url = '/' + id;
-          
-      	  FB.api(url, function(response) { 
-        	  user.about = response;
-        	  name = user.about.name;
-        	  if (id == MY_ID)
-        		  MY_NAME = name;
-        	  nCompletedReqs++; 
-        	  if (nCompletedReqs == nReqs) 
-        		  done_for_user(id, name, user); 
-      	  });
-      	  
-          for (var i = 0; i < fields.length; i++) {
-			var field = fields[i];
-			LOG ('field ' + field);
-            FB.api('/' + id + '/' + field, function(f) { return function(response) { 
-            	nCompletedReqs++;
-            	user[f] = response; 
-            	if (nCompletedReqs == nReqs) // ok, we got all the lookups done for this user
-            		done_for_user(id, name, user);  
-            	};
-            }(field));
-		}
-	}
   
-    function populate_existing_friends() {
+      /* friends is an array if {id:.., name:..} objs */
+      function fetch_users_details (friends) {
+    	  var names = $.map(friends, function(o) { return o.name; });
+    	  LOG ('fetching friends ' + names);   
+    	  var ids = $.map(friends, function(o) { return o.id; });
+
+    	  var html = '<div id="looking_up" style="display:none">';
+    	  for (var i = 0; i < friends.length; i++)
+    		  html += '<img src="http://graph.facebook.com/' + friends[i].id + '/picture" title="' + friends[i].name + '" style="height:20px"/> ';
+    	  if (friends.length > 2)
+    		  html += '&nbsp;<img src="images/spinner.gif" style="position:relative;bottom:3px;height:15px"/>';
+    	  html += '</div>';
+    	  $('#fb_status').html(html);
+    	  $('#looking_up').fadeIn('slow');
+    	  
+    	  var me_fields = ['name', 'friends', 'hometown', 'location']; // #checkins
+    	  var other_fields = ['name', 'hometown', 'location']; // #checkins
+    	  // fields to fetch: for me, friends + loc, for others, just loc
+    	  var fields = (ids[0] == MY_ID ? me_fields : other_fields);
+
+    	  // do the fetch... what about error handling?
+    	  var url = '?ids=' + ids.join() + '&fields=' + fields.join();
+    	  LOG ('fb api: ' + url);
+    	  FB.api(url, function(response) { 
+    		  done_for_users(friends, response);
+    	  });
+      }
+  
+    function populate_existing_info() {
 		  $.ajax({url: '/80friends/ajax/getPersonInfo.jsp?id=' + MY_ID, 
 				 type:'GET',
 				 dataType:'json',
@@ -290,7 +278,7 @@
     	else
     		$('#fb_status').html('Uh, oh. Looks like you need more connections.');
 
-    	$("#absent_countries").html('<br/><hr/><h1>No connections to</h1>')
+    	$("#absent_countries").html('<br/><hr/><h1>No connections to:</h1>');
 		LOG (ALL_CODES.length + ' countries');
 		for (var i = 0; i < ALL_CODES.length; i++)
 		{
@@ -324,24 +312,17 @@
     function populate_friends_anew() {
     	// wipe out stuff in case it already existed, and the user pressed refresh
     	$('#countries').html('');
-
-    	/*
-    	// initialize status area with space for 10 images
-    	var n_images = 10;
-    	var html = '';
-    	for (var i = 0; i < n_images; i++)
-    		html += '<img style="display:none;height:30spx" class="friend_pic"/> ';
-    	html += '&nbsp;'; // so the div isn't completely empty
-    	$('#fb_status').html(html);
-    	*/
+    	
     	$('#absent_countries').html('');
     	$('#compare_button').hide();
     	$('#match_button').hide();
     	
     	reset_map_data();
     	refresh_map();
-    	
-    	fetch_user_details(MY_ID, 'me'); // this will also kick off fetching friends details
+
+    	fetch_users_details([{id: MY_ID, name: 'me'}]); // this will also kick off fetching friends details
+
+//    	fetch_user_details(MY_ID, 'me'); // this will also kick off fetching friends details
     }
 
     function onLogin() {
@@ -366,7 +347,7 @@
        		    $('#top_right').html('<img src=\"http://graph.facebook.com/' + MY_ID + '/picture\"/>');
 //    	    	$('#top_right').append('<br/>' + MY_NAME);
         		if (resp.id_exists)
-        			populate_existing_friends();
+        			populate_existing_info();
         		else
         			populate_friends_anew();
         	}
@@ -422,4 +403,3 @@
     		  */
     	});
     };
-  

@@ -84,8 +84,8 @@ public class Countries {
 
         return o;
     }
-
     
+    /** id here is the loc id */
     public static Location countryFromLocation(String country, String id) throws IOException, JSONException
 	{	
 		boolean found = false;
@@ -110,6 +110,10 @@ public class Countries {
 			L.code = code; L.descr = country.toUpperCase(); 
 			return L;
 		}
+
+		// we don' even have a real id
+		if (id == null || id.length() == 0)
+			return null;
 		
 		// try to find country from the id
 		// refs: http://stackoverflow.com/questions/8427702/location-lat-long-using-facebook-api

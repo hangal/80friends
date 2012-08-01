@@ -37,16 +37,18 @@
     <div id="fb_status">
 	</div>
 	<div style="clear:both"></div>
-	
-	<div id="refresh_icon" style="display:none"><img style="padding:5px" title="Refresh" src="images/refresh.png"></div>
+
+	<div style="position:relative">
 	<div id="countries">&nbsp;</div>  	
+	<div id="refresh_icon" style="display:none"><img style="padding:5px" title="Refresh" src="images/refresh.png"></div>
 	<div id="map"></div>
 	<div style="position:relative">
 		<br/>
 		<button id="compare_button" style="width:275px;left:525px;display:none;top:10px">Compare with others&nbsp;&nbsp;&nbsp;&rarr;</button>
 		<br/>
 	</div>
-
+	</div>
+	
 	<div id="absent_countries"></div>
 
 	<div style="position:relative">

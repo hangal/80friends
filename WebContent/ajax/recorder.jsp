@@ -4,40 +4,50 @@
 <%@page language="java" import="edu.stanford.eightyfriends.*"%>
 <%
 	String json = request.getParameter("body");
-	JSONObject o = new JSONObject(json);
+	JSONObject user_details = new JSONObject(json);
 	Location hometownCountry = null, locationCountry = null;
 	String my_id = request.getParameter("my_id");
-	String my_name = request.getParameter("my_name");
-	String id = request.getParameter("id"), name = request.getParameter("friendName");
+	String[] ids = request.getParameterValues("ids[]"), names = request.getParameterValues("friendNames[]");
 	String hid = "?", hname = "?";
 	String lid = "?", lname = "?";
 
 	// hack alert: if my_id == id, we know that the rest of this id's data is coming soon. clear existing data for this user in db
-	if (my_id != null && my_id.equals(id)) {
-		JSPHelper.log("USER initiated lookup: " + name + " (" + id + ") from "  + request.getRemoteHost() + " using " + request.getHeader("user-agent"));
+	if (my_id != null && my_id.equals(ids[0])) {
+		JSPHelper.log("USER initiated lookup: " + names[0] + " (" + ids[0] + ") from "  + request.getRemoteHost() + " using " + request.getHeader("user-agent"));
 		MongoUtils.wipeDataForId(my_id);
 	}
-	MongoUtils.setName(id, name);
 	
-	try {
-		JSONObject about = o.getJSONObject("about");
-		id = about.getString("id");
-		name = about.getString("name");
-		try { 
-			hname = about.getJSONObject("hometown").getString("name");
-			hid = about.getJSONObject("hometown").getString("id");
-			hometownCountry = Countries.countryFromLocation(hname, hid);
-		} catch (Exception e) { }
-		
-		try { 
-			lname = about.getJSONObject("location").getString("name");
-			lid = about.getJSONObject("location").getString("id");
-			locationCountry = Countries.countryFromLocation(lname, lid);
-		} catch (Exception e) { }
-		
-	} catch (Exception e)  { }
+	JSONObject result = new JSONObject();
+	
+	for (String id: ids)
+	{
+		String name = "?";
+		try {
+			JSONObject o = user_details.getJSONObject(id);
 
-	System.out.println ("my_id = " + my_id + " id = " + id + " name = " + name + " country = " + hometownCountry + " (" + hname + ";" + hid + ") location = " + locationCountry + " (" + lname + ";" + lid + ")");
+			// o contains name: and 
+			// locations: ...
+			
+			// set the name first
+			name = o.getString("name");
+			MongoUtils.setName(id, name);
+
+			// now read off locations
+			try { 
+				hname = o.getJSONObject("hometown").getString("name");
+				hid = o.getJSONObject("hometown").getString("id");
+				hometownCountry = Countries.countryFromLocation(hname, hid);
+			} catch (Exception e) { }
+			
+			try { 
+				lname = o.getJSONObject("location").getString("name");
+				lid = o.getJSONObject("location").getString("id");
+				locationCountry = Countries.countryFromLocation(lname, lid);
+			} catch (Exception e) { }
+			
+		} catch (Exception e)  { }
+	
+	JSPHelper.log.info ("my_id = " + my_id + " id = " + id + " name = " + name + " country = " + hometownCountry + " (" + hname + ";" + hid + ") location = " + locationCountry + " (" + lname + ";" + lid + ")");
 	
 	// maybe call clearFriends otherwise?
 	if (!my_id.equals(id))
@@ -55,6 +65,8 @@
 	if (locationCountry != null)
 		ja.put(1, locationCountry.toJSONObject());
 
-	out.println (ja);
+	result.put (id, ja);
+	}
+	out.println (result);
 //	MongoUtils.add(json);
 %>
