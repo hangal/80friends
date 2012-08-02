@@ -73,7 +73,7 @@
 	The global leader is <a href="http://www.facebook.com/leo.rong">Leo Rong</a> with 64 countries.
 </div>
 <div style="float:right;width:250px;">
-	<button style="width:250px;top:0;left:auto" onclick="postToFeed()">Invite your friends&nbsp;&nbsp;&nbsp;&rarr;</button>
+	<button id="invite_button" style="width:250px;top:0;left:auto" onclick="invite_button_clicked()">Invite your friends&nbsp;&nbsp;&nbsp;&rarr;</button>
 </div>
 <div style="clear:both"></div>
 
@@ -99,7 +99,9 @@
 	          });
 	    };
 	    
-    function postToFeed() {
+    function invite_button_clicked() {
+    	// hide the invite button because it interferes with facebook invite
+    	$('#invite_button').hide();
         // calling the API ...
         var obj = {
           method: 'feed',
@@ -119,6 +121,7 @@
         		data: {id:FB.getUserID(), message: 'Posted to feed'},
         		dataType:'json',
         		success: function(resp) { 
+        	    	$('#invite_button').hide();
         		}
         	});
         }

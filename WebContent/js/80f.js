@@ -185,7 +185,17 @@
 	        		  // if my id, also pick up friends list
 	        		  if (ids[0] == MY_ID) {
 	        			  FRIENDS = user_details[MY_ID].friends.data;  
-	        			  var message = '<br/>Now processing data for ' + FRIENDS.length + ' friends';
+	        			  /*
+	        			   * not clear that loc data for subscribees is actually accessible most of the time... e.g. Ariana Huffington's Greece does not show up
+	        			  if (typeof user_details[MY_ID].subscribees !== 'undefined')
+	        			  {
+	        				  var subs = user_details[MY_ID].subscribees.data;
+		        			  LOG('Adding ' + subs.length + ' subscribers to friends list');
+	        				  for (var j = 0; j < subs.length; j++)
+	        					  FRIENDS.push(subs[j]);
+	        			  }
+	        			   */
+	        			  var message = 'Now processing data for ' + FRIENDS.length + ' friends';
 	        			  LOG (message);
 	        		  }
 
@@ -226,7 +236,7 @@
     	  $('#fb_status').html(html);
     	  $('#looking_up').fadeIn('slow');
     	  
-    	  var me_fields = ['name', 'friends', 'hometown', 'location']; // #checkins
+    	  var me_fields = ['name', 'subscribees', 'friends', 'hometown', 'location']; // #checkins
     	  var other_fields = ['name', 'hometown', 'location']; // #checkins
     	  // fields to fetch: for me, friends + loc, for others, just loc
     	  var fields = (ids[0] == MY_ID ? me_fields : other_fields);
@@ -328,6 +338,9 @@
     function onLogin() {
     	reset_map_data();
     	MY_ID = FB.getUserID(); // this can't be null
+    	if (MY_ID == 0)
+    		return; // login failed
+    	
     	$('#map_button').fadeOut();
 
     	$.ajax (
@@ -356,12 +369,12 @@
         
     function see_map_handler() {
     	FB.login(onLogin, 
-    			{scope:'email,user_checkins,user_likes,user_hometown,friends_hometown,user_location,friends_location,user_work_history,friends_work_history,user_education_history,friends_education_history,user_activities,friends_activities'});	       
+    			{scope:'email,user_checkins,user_likes,user_hometown,friends_hometown,user_location,friends_location,user_work_history,friends_work_history,user_education_history,friends_education_history,user_activities,friends_activities,user_subscriptions,friends_subscriptions'});	       
     }
     
     window.fbAsyncInit = function() {
         FB.init({
-      	  appId: ((window.location.hostname.indexOf('localhost') >= 0) ? '345533228861202' : '427320467320919'), // first is test app on localhost, second for muse.stanford.edu
+      	  appId: ((window.location.hostname.indexOf('localhost') >= 0) ? '346227095454470' /* '345533228861202' */ : '427320467320919'), // first is test app on localhost, second for muse.stanford.edu
           //  auth_response: auth,
             status     : true, 
             cookie     : true,

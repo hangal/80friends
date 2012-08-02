@@ -1,9 +1,11 @@
-<div id="footer" style="display:none;margin-left:30px">
-	<div class="footer-item" style="width:100px"><a href="about.jsp">About</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-	<div class="footer-item" style="width:100px"><a href="help.jsp">Help </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+<div id="footer" style="display:none;margin-left:10px">
+	<div class="footer-item" style="width:90px"><a href="about.jsp">About</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+	<div class="footer-item" style="width:90px"><a href="help.jsp">Help </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
 	<div class="footer-item"><a href="http://www.change.org/about/hackforchange">Hack for Change</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
 	<div class="footer-item"><a href="http://mobisocial.stanford.edu">Stanford Mobisocial</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
 	<div class="footer-item"><a href="http://peace.facebook.com">Peace on Facebook</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+	<div class="footer-item"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://bit.ly/80friends" data-text="Map your Facebook friends around the world">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></div>
 	<div style="clear:both"></div>
 </div>
 
