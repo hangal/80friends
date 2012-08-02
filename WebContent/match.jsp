@@ -12,6 +12,11 @@
     <link rel="stylesheet" type="text/css" href="css/80friends.css"/>
     <script type='text/javascript' src='https://www.google.com/jsapi'></script>
  	<link rel="icon" type="image/png" href="images/globe.png" />
+    <script src="js/cufon-yui.js" type="text/javascript"></script>
+    <script src="js/London2012.font.js" type="text/javascript"></script>
+ 	<script type="text/javascript">
+            Cufon.replace('h1'); // Works without a selector engine
+    </script>
  
 	<script src="js/jquery/jquery.js"></script>
 	<script src="js/json2.js"></script>
@@ -20,7 +25,7 @@
     <body style="margin-left:5%;margin-right:5%">
     <div style="padding-top:20px;margin:auto;width:800px;position:relative">
     <div style="background-color:white;padding:2% 10px 2% 10px">
-	<h1>Around the World with 80 Friends</h1> 
+	<h1 style='font-family:"London Olympics 2012"'>Around the World with 80 Friends</h1> 
 
 <%    
 	String[] codes = request.getParameterValues("code");
@@ -65,6 +70,8 @@
 <%@include file="footer.jsp"%>
 </div>
 <script type="text/javascript">
+Cufon.now();
+
 $(document).ready(function() { 
     $('#footer').fadeIn();
 });</script>	

@@ -12,6 +12,12 @@
     <link rel="stylesheet" type="text/css" href="css/80friends.css"/>
     <script type='text/javascript' src='https://www.google.com/jsapi'></script>
  	<link rel="icon" type="image/png" href="images/globe.png" />
+    
+    <script src="js/cufon-yui.js" type="text/javascript"></script>
+    <script src="js/London2012.font.js" type="text/javascript"></script>
+ 	<script type="text/javascript">
+            Cufon.replace('h1'); // Works without a selector engine
+    </script>
  
 	<script src="js/jquery/jquery.js"></script>
 	<script src="js/json2.js"></script>
@@ -125,6 +131,8 @@
 <%@include file="footer.jsp"%>
 </div>
 <script type="text/javascript">
+Cufon.now();
+
 $(document).ready(function() { 
     $('#footer').fadeIn();
 });</script>	

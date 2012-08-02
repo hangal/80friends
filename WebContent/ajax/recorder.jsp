@@ -7,8 +7,6 @@
 	JSONObject user_details = new JSONObject(json);
 	String my_id = request.getParameter("my_id");
 	String[] ids = request.getParameterValues("ids[]"), names = request.getParameterValues("friendNames[]");
-	String hid = "?", hname = "?";
-	String lid = "?", lname = "?";
 
 	// hack alert: if my_id == id, we know that the rest of this id's data is coming soon. clear existing data for this user in db
 	if (my_id != null && my_id.equals(ids[0])) {
@@ -21,6 +19,8 @@
 	for (String id: ids)
 	{
 		Location hometownCountry = null, locationCountry = null;
+		String hid = "?", hname = "?";
+		String lid = "?", lname = "?";
 
 		String name = "?";
 		try {
