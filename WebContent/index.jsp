@@ -35,7 +35,7 @@
 	<div style="float:left">
 	<h1>Around the World with 80 Friends</h1> 
 	</div>
-	<button id="map_button" style="display:none;top:340px;left:280px;font-size:27px;width:330px;height:60px" onclick="see_map_handler()">Build your map &nbsp;&nbsp;&nbsp;&rarr;</button>
+	<button id="map_button" style="display:none;top:340px;left:280px;font-size:27px;width:300px;height:60px" onclick="see_map_handler()">Map your friends &nbsp;&nbsp;&nbsp;&rarr;</button>
 	<div id="top_right">
 	</div>
 	<div style="clear:both"></div>
@@ -50,7 +50,7 @@
 	<div id="map"></div>
 	<div style="position:relative">
 		<br/>
-		<button id="compare_button" style="width:275px;left:525px;display:none;top:10px">Compare with others&nbsp;&nbsp;&nbsp;&rarr;</button>
+		<button id="compare_button" style="float:right;width:225px;display:none;top:10px">See your rank&nbsp;&nbsp;&nbsp;&rarr;</button>
 		<br/>
 	</div>
 	</div>
@@ -58,8 +58,9 @@
 	<div id="absent_countries"></div>
 
 	<div style="position:relative">
-	<br/><button id="match_button" style="display:none;top:10px">Find friends &nbsp;&nbsp;&nbsp;&rarr;</button>
+	<br/><button id="match_button" style="display:none;top:10px">Find connections &nbsp;&nbsp;&nbsp;&rarr;</button>
 	</div>
+	
 	
 	<div>&nbsp;</div>
 	<div>&nbsp;</div>

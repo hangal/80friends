@@ -141,7 +141,7 @@
       /** resp has to be an array of objects, each with a code field */
       function record_countries_for_friend(name, resp)
       {
-		  LOG (name + ' has ' + resp.length + ' countries');
+		  LOG (name + ' has ' + resp.length + ' countries: ' + 	$.map(resp, function(o) { return o ? o.descr : null; }).join());
 		  for (var i = 0; i < resp.length; i++)
 		  {
 			  if (resp[i])
@@ -302,7 +302,7 @@
 		$('#match_button').fadeIn();
 		$('#match_button').click(function() { return show_matches(); });
 		$('#compare_button').fadeIn();
-		$('#compare_button').click(function() { window.location = "leaderboard"; });
+		$('#compare_button').click(function() { window.open('leaderboard');});
 
 		$('#absent_countries img').click (function(e) { 
 			var target = e.target; 
@@ -311,6 +311,38 @@
 		});
     }
 
+    function invite_button_clicked() {
+
+    	// hide the invite button because it interferes with facebook invite
+    	$('#invite_button').hide();
+    	// calling the API ...
+    	var obj = {
+    			method: 'feed',
+    			link: 'http://bit.ly/80friends',
+    			picture: resp.url, // 'http://muse.stanford.edu:8080/80friends/images/globe.png',
+    			name: 'Around the World with 80 Friends',
+    			caption: 'Make connections around the world',
+    			description: '<%=message%>'
+    	};
+
+    	function callback(response) {
+    		// ideally we should check if the user pressed cancel instead of share.
+    		// See http://developers.facebook.com/docs/reference/dialogs/feed/
+    		$.ajax ({  
+    			url: '/80friends/ajax/log.jsp',
+    			type: 'POST',
+    			data: {id:FB.getUserID(), message: 'Posted to feed'},
+    			dataType:'json',
+    			success: function(resp) { 
+    				$('#invite_button').hide();
+    			}
+    		});
+    	}
+
+    	FB.ui(obj, callback);
+    }
+
+    
     function show_matches() {
     	var $x = $('#absent_countries img');
     	var url = 'match.jsp?id=' + MY_ID;

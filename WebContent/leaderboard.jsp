@@ -29,8 +29,8 @@
     
     <div style="padding-top:20px;margin:auto;width:800px;position:relative">
     <div style="background-color:white;padding:2% 10px 2% 10px">
-	<h1>Around the World with 80 Friends<br/>
-	<span style="font-size:50%">Leaderboard in your network</span> </h1>
+	<h1>Around the World with 80 Friends</h1>
+	<span style="position:relative;top:-15px;">Leaderboard in your network</span>
 
 <%
 	String id = request.getParameter("id");

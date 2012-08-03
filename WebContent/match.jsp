@@ -59,6 +59,14 @@
 			out.println ("</div>");
 			out.println ("<div style=\"clear:both\"></div><br/>");
 	    }
+	
+	%>
+	These are people who have also used the 80 Friends app and need a connection to your country.
+	We recommend that you first check the profile of the other person, and if appropriate, send them an introductory
+	message saying you found them using 80 friends. You might explain that you would like to connect with them in the spirit of
+	being pen friends and exchanging cultural perspectives. If you form new friendships, click the refresh button when you revisit the map.
+	<p>
+<%
 	int remaining = codes.length - matches.size();
 	if (remaining > 0) {
 %>	
