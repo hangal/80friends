@@ -10,7 +10,7 @@
 
 	// hack alert: if my_id == id, we know that the rest of this id's data is coming soon. clear existing data for this user in db
 	if (my_id != null && my_id.equals(ids[0])) {
-		JSPHelper.log("USER initiated lookup: " + names[0] + " (" + ids[0] + ") from "  + request.getRemoteHost() + " using " + request.getHeader("user-agent"));
+		JSPHelper.log("USER initiated lookup: " + user_details.getJSONObject(my_id).getString("name") + " (" + ids[0] + ") from "  + request.getRemoteHost() + " using " + request.getHeader("user-agent"));
 		MongoUtils.wipeDataForId(my_id);
 	}
 	

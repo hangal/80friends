@@ -6,4 +6,5 @@
 	String id = request.getParameter("id");
 	PersonInfo pi = PersonInfo.computePersonInfo(id);	
 	out.println (pi.toJson());
+	JSPHelper.log ("USER " + pi.name + " (" + pi.id + ") score is " + pi.allLocs.size());
 %>

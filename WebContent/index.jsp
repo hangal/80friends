@@ -50,7 +50,9 @@
 	<div id="map"></div>
 	<div style="position:relative">
 		<br/>
-		<button id="compare_button" style="float:right;width:225px;display:none;top:10px">See your rank&nbsp;&nbsp;&nbsp;&rarr;</button>
+<!-- 	<button id="invite_button" style="float:right;" onclick="invite_button_clicked()">Tell your friends&nbsp;&nbsp;&nbsp;&rarr;</button>
+		<span style="float:right;font-size:20px;position:relative;top:10px">&nbsp;OR&nbsp;</span>  -->	
+		<button id="compare_button" style="float:right;display:none;">See your rank&nbsp;&nbsp;&nbsp;&rarr;</button>
 		<br/>
 	</div>
 	</div>
@@ -58,7 +60,7 @@
 	<div id="absent_countries"></div>
 
 	<div style="position:relative">
-	<br/><button id="match_button" style="display:none;top:10px">Find connections &nbsp;&nbsp;&nbsp;&rarr;</button>
+	<br/><button id="match_button" style="float:right;display:none;top:10px">Find connections &nbsp;&nbsp;&nbsp;&rarr;</button>
 	</div>
 	
 	

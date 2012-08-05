@@ -73,7 +73,7 @@
 	The global leader is <a href="http://www.facebook.com/leo.rong">Leo Rong</a> with 64 countries.
 </div>
 <div style="float:right;width:250px;">
-	<button id="invite_button" style="width:250px;top:0;left:auto" onclick="invite_button_clicked()">Invite your friends&nbsp;&nbsp;&nbsp;&rarr;</button>
+	<button id="invite_button" style="float:right;top:0;left:auto" onclick="invite_button_clicked()">Invite your friends&nbsp;&nbsp;&nbsp;&rarr;</button>
 </div>
 <div style="clear:both"></div>
 

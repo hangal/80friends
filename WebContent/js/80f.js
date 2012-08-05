@@ -287,6 +287,9 @@
     		$('#fb_status').html('Congratulations, ' + MY_NAME + ', you have connections to ' + n_countries + ' countries.');
     	else
     		$('#fb_status').html('Uh, oh. Looks like you need more connections.');
+    	
+    	// just log on the server
+    	$.get('ajax/log.jsp?message=has connections to ' + n_countries + ' countries');
 
     	$("#absent_countries").html('<br/><hr/><h1>No connections to:</h1>');
 		LOG (ALL_CODES.length + ' countries');
