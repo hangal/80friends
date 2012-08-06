@@ -34,6 +34,36 @@
     	return result;
     }
 
+    function invite_button_clicked() {
+    	// hide the invite button because it interferes with facebook invite
+    	$('button.after_flags').hide();
+        // calling the API ...
+        var obj = {
+          method: 'feed',
+          link: 'http://bit.ly/80friends',
+          picture: 'http://muse.stanford.edu:8080/80friends/images/globe.png',
+          name: 'Around the World with 80 Friends',
+          caption: 'Make connections around the world',
+          description: '<%=message%>'
+        };
+
+        function callback(response) {
+        	// ideally we should check if the user pressed cancel instead of share.
+        	// See http://developers.facebook.com/docs/reference/dialogs/feed/
+        	$.ajax ({  
+        		url: '/80friends/ajax/log.jsp',
+        		type: 'POST',
+        		data: {id:FB.getUserID(), message: 'Posted to feed'},
+        		dataType:'json',
+        		success: function(resp) { 
+        	    	$('#invite_button').hide();
+        		}
+        	});
+        }
+
+        FB.ui(obj, callback);
+      }
+
     function join_keys(o, max) {
     	// ellipsize beyond max
     	var keys = own_keys(o);
@@ -302,9 +332,8 @@
 				$("#absent_countries").append ('<img style="height:13px" id="' + ALL_CODES[i].code + '" title="' + ALL_CODES[i].descr + '" src="http://flagpedia.net/data/flags/mini/' + ALL_CODES[i].code.toLowerCase() + '.png"/> ' + ' &nbsp;&nbsp; ');
 			}
 		}
-		$('#match_button').fadeIn();
+		$('button.after_flags').fadeIn();
 		$('#match_button').click(function() { return show_matches(); });
-		$('#compare_button').fadeIn();
 		$('#compare_button').click(function() { window.open('leaderboard');});
 
 		$('#absent_countries img').click (function(e) { 
@@ -314,21 +343,31 @@
 		});
     }
 
-    function invite_button_clicked() {
+    function invite_button_clicked()
+    {
+    	var n_countries = MAP_DATA.length - 1; // -1 for the header
+    	message = 'I am connected to ' + n_countries + ' ' + (n_countries != 1 ? 'countries':'country') + ' through Facebook. What\'s your score?';
+    	publish_to_fb(message);
+    }
+    
+    function publish_to_fb(message) {
 
-    	// hide the invite button because it interferes with facebook invite
-    	$('#invite_button').hide();
+    	// hide buttons because they may interfere with facebook share button
+    	$('button.after_flags').hide();
+    	
     	// calling the API ...
     	var obj = {
     			method: 'feed',
     			link: 'http://bit.ly/80friends',
-    			picture: resp.url, // 'http://muse.stanford.edu:8080/80friends/images/globe.png',
+    			picture: 'http://muse.stanford.edu:8080/80friends/images/globe.png',
     			name: 'Around the World with 80 Friends',
     			caption: 'Make connections around the world',
-    			description: '<%=message%>'
+    			description: message    				
     	};
 
     	function callback(response) {
+    		// restore the buttons, cos they've been hidden
+			$('button.after_flags').show();
     		// ideally we should check if the user pressed cancel instead of share.
     		// See http://developers.facebook.com/docs/reference/dialogs/feed/
     		$.ajax ({  
@@ -337,7 +376,6 @@
     			data: {id:FB.getUserID(), message: 'Posted to feed'},
     			dataType:'json',
     			success: function(resp) { 
-    				$('#invite_button').hide();
     			}
     		});
     	}
@@ -356,11 +394,9 @@
 
     function populate_friends_anew() {
     	// wipe out stuff in case it already existed, and the user pressed refresh
-    	$('#countries').html('');
-    	
+    	$('#countries').html('');    	
     	$('#absent_countries').html('');
-    	$('#compare_button').hide();
-    	$('#match_button').hide();
+    	$('button.after_flags').hide();
     	
     	reset_map_data();
     	refresh_map();

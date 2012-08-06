@@ -73,7 +73,7 @@
 	The global leader is <a href="http://www.facebook.com/leo.rong">Leo Rong</a> with 64 countries.
 </div>
 <div style="float:right;width:250px;">
-	<button id="invite_button" style="float:right;top:0;left:auto" onclick="invite_button_clicked()">Invite your friends&nbsp;&nbsp;&nbsp;&rarr;</button>
+	<button class="after_flags" style="float:right;" onclick="create_invite()">Invite your friends&nbsp;&nbsp;&nbsp;&rarr;</button>
 </div>
 <div style="clear:both"></div>
 
@@ -81,6 +81,11 @@
 </div>
 
 	<script type="text/javascript">
+	function create_invite() // note: different from invite_button_clicked in 80f.js
+	{
+		publish_to_fb('<%=message%>');	
+	}
+	
 	(function(d) {
         var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
         js = d.createElement('script'); js.id = id; js.async = true;
@@ -99,35 +104,7 @@
 	          });
 	    };
 	    
-    function invite_button_clicked() {
-    	// hide the invite button because it interferes with facebook invite
-    	$('#invite_button').hide();
-        // calling the API ...
-        var obj = {
-          method: 'feed',
-          link: 'http://bit.ly/80friends',
-          picture: 'http://muse.stanford.edu:8080/80friends/images/globe.png',
-          name: 'Around the World with 80 Friends',
-          caption: 'Make connections around the world',
-          description: '<%=message%>'
-        };
-
-        function callback(response) {
-        	// ideally we should check if the user pressed cancel instead of share.
-        	// See http://developers.facebook.com/docs/reference/dialogs/feed/
-        	$.ajax ({  
-        		url: '/80friends/ajax/log.jsp',
-        		type: 'POST',
-        		data: {id:FB.getUserID(), message: 'Posted to feed'},
-        		dataType:'json',
-        		success: function(resp) { 
-        	    	$('#invite_button').hide();
-        		}
-        	});
-        }
-
-        FB.ui(obj, callback);
-      }
+ 
     </script>
 	</div>
 <hr/>

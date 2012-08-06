@@ -67,7 +67,7 @@ button {
 	padding-right:5px;
 }
 
-button:hover { border: 3px solid #335D14; }
+button:hover { border: 3px solid #335D14;}
 
 #footer, #footer a {font-size:10pt; color:gray; text-decoration:none}
 .footer-item {display:inline;padding-left:5px; float:left;width:140px}

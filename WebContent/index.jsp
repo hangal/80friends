@@ -35,7 +35,7 @@
 	<div style="float:left">
 	<h1>Around the World with 80 Friends</h1> 
 	</div>
-	<button id="map_button" style="display:none;top:340px;left:280px;font-size:27px;width:300px;height:60px" onclick="see_map_handler()">Map your friends &nbsp;&nbsp;&nbsp;&rarr;</button>
+	<button id="map_button" style="position:absolute;display:none;top:340px;left:280px;font-size:27px;width:300px;height:60px" onclick="see_map_handler()">Map your friends &nbsp;&nbsp;&nbsp;&rarr;</button>
 	<div id="top_right">
 	</div>
 	<div style="clear:both"></div>
@@ -48,19 +48,19 @@
 	<div id="countries">&nbsp;</div>  	
 	<div id="refresh_icon" style="display:none"><img style="padding:5px" title="Refresh" src="images/refresh.png"></div>
 	<div id="map"></div>
-	<div style="position:relative">
+	<div style="position:relative;margin:0% 20% 0% 20%">
 		<br/>
-<!-- 	<button id="invite_button" style="float:right;" onclick="invite_button_clicked()">Tell your friends&nbsp;&nbsp;&nbsp;&rarr;</button>
-		<span style="float:right;font-size:20px;position:relative;top:10px">&nbsp;OR&nbsp;</span>  -->	
-		<button id="compare_button" style="float:right;display:none;">See your rank&nbsp;&nbsp;&nbsp;&rarr;</button>
+	 	<button class="after_flags" id="invite_button" style="float:left;display:none;" onclick="invite_button_clicked()">Tell your friends</button>
+		<button class="after_flags" id="compare_button" style="float:right;display:none;">See your rank</button>
 		<br/>
+		<div style="clear:both"></div>
 	</div>
 	</div>
 	
 	<div id="absent_countries"></div>
 
 	<div style="position:relative">
-	<br/><button id="match_button" style="float:right;display:none;top:10px">Find connections &nbsp;&nbsp;&nbsp;&rarr;</button>
+	<br/><button class="after_flags" id="match_button" style="float:right;display:none;top:10px">Find connections</button>
 	</div>
 	
 	
