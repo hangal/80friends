@@ -308,9 +308,7 @@
     
     function show_uncovered_countries()
     {
-    	$('#refresh_icon').fadeIn();
-    	$('#refresh_icon').click(populate_friends_anew);
-    	
+    	$('#refresh_icon').fadeIn();    	
     	// we're all done, no more lookups
     	var n_countries = own_keys(CODES_TO_PEOPLE).length;
     	if (n_countries >= 2)
@@ -332,10 +330,8 @@
 				$("#absent_countries").append ('<img style="height:13px" id="' + ALL_CODES[i].code + '" title="' + ALL_CODES[i].descr + '" src="http://flagpedia.net/data/flags/mini/' + ALL_CODES[i].code.toLowerCase() + '.png"/> ' + ' &nbsp;&nbsp; ');
 			}
 		}
-		$('button.after_flags').fadeIn();
-		$('#match_button').click(function() { return show_matches(); });
-		$('#compare_button').click(function() { window.open('leaderboard');});
 
+		$('button.after_flags').fadeIn();
 		$('#absent_countries img').click (function(e) { 
 			var target = e.target; 
 			$(target).next().html(''); // fade out spaces after this image too
@@ -383,7 +379,6 @@
     	FB.ui(obj, callback);
     }
 
-    
     function show_matches() {
     	var $x = $('#absent_countries img');
     	var url = 'match.jsp?id=' + MY_ID;

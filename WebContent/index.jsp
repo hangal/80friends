@@ -46,12 +46,12 @@
 
 	<div style="position:relative">
 	<div id="countries">&nbsp;</div>  	
-	<div id="refresh_icon" style="display:none"><img style="padding:5px" title="Refresh" src="images/refresh.png"></div>
+	<div id="refresh_icon" onclick="populate_friends_anew()" style="display:none"><img style="padding:5px" title="Refresh" src="images/refresh.png"></div>
 	<div id="map"></div>
 	<div style="position:relative;margin:0% 20% 0% 20%">
 		<br/>
 	 	<button class="after_flags" id="invite_button" style="float:left;display:none;" onclick="invite_button_clicked()">Tell your friends</button>
-		<button class="after_flags" id="compare_button" style="float:right;display:none;">See your rank</button>
+		<button class="after_flags" id="compare_button" onclick="window.open('leaderboard')" style="float:right;display:none;">See your rank</button>
 		<br/>
 		<div style="clear:both"></div>
 	</div>
@@ -60,7 +60,7 @@
 	<div id="absent_countries"></div>
 
 	<div style="position:relative">
-	<br/><button class="after_flags" id="match_button" style="float:right;display:none;top:10px">Find connections</button>
+	<br/><button class="after_flags" id="match_button" onclick="show_matches()" style="float:right;display:none;top:10px">Find connections</button>
 	</div>
 	
 	
