@@ -34,9 +34,11 @@
 		out.println ("What countries would you like to connect to? Please retry.");
 		return;
 	}
-	System.out.println ("id " + id + " needs " + codes.length + " friends");
 	MongoUtils.addNeeds(id, codes);
 	Collection<Match> matches = MongoUtils.generateMatches(id);
+
+	JSPHelper.log.info ("id " + id + " " + MongoUtils.getNameForId(id) + " has " + codes.length + " needs, suggested " + matches.size() + " matches");
+
 	if (matches.size() == 0) { %>
 	No matches right now, but we're watching out in <%=codes.length %> countries for you. 
 	As soon as you can be paired with someone who is looking for a friend from your country, 

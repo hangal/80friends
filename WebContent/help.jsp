@@ -29,18 +29,20 @@ We always associate a person with the country of his or her hometown AND current
 Of course, this information is not always entered by everyone. Therefore our estimate of the number of countries you are connected to is a lower bound. 
 
 <p>
-2. You can see a leaderboard of the number of countries that each person in your network is connected to. 
+2. See a leaderboard of the number of countries that each person in your network is connected to. 
 The leaderboard only shows people in your network who have installed this application.
-Invite your friends to join the app to see where they stand on the leaderboard.
+Invite your friends to join the app to see where they stand.
 
 <p>
-3. Most importantly, 80 Friends will help pair up people from different countries. On the matches page,
-you can see other people who have also used the 80 Friends app and need a connection to your country.
+3. Most importantly, 80 Friends will help pair up people from different countries.When you click on "Find connections"
+you can see other people who have also used the 80 Friends app and need a connection to a country you are affiliated with.
 If you form new friendships, click the refresh button when you revisit the map.
 
 We recommend that you first check the profile of the other person, and if appropriate, send them an introductory
 message saying you found them using 80 friends. You might explain that you would like to connect with them in the spirit of
-being pen friends and exchanging cultural perspectives.
+being pen friends and exchanging cultural perspectives. 
+
+You can also try to remember friends from specific countries who are not yet connected to you on Facebook and friend them.
 
 <p>
 The site <a href="http://peace.facebook.com">Peace on Facebook</a>

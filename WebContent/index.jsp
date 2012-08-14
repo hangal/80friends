@@ -60,7 +60,7 @@
 	<div id="absent_countries"></div>
 
 	<div style="position:relative">
-	<br/><button class="after_flags" id="match_button" onclick="show_matches()" style="float:right;display:none;top:10px">Find connections</button>
+	<br/><button class="after_flags" id="match_button" onclick="show_matches()" style="float:left;position:relative;margin-left:40%;display:none;top:10px">Find connections</button><br/>
 	</div>
 	
 	

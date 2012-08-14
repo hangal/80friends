@@ -13,7 +13,6 @@ import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -43,8 +42,8 @@ public class MongoUtils {
 			o = (BasicDBObject) com.mongodb.util.JSON.parse("{id:1}"); db.getCollection("needs").ensureIndex(o); // needs doesn't need index on code i think?
 			o = (BasicDBObject) com.mongodb.util.JSON.parse("{id:1,code:1}"); db.getCollection("locations").ensureIndex(o);
 			o = (BasicDBObject) com.mongodb.util.JSON.parse("{id:1}"); db.getCollection("names").ensureIndex(o);
-
-		} catch (Exception e) { System.err.println ("Unable to initialize Mongo"); }
+			o = (BasicDBObject) com.mongodb.util.JSON.parse("{id:1,score:1}"); db.getCollection("scores").ensureIndex(o);
+		} catch (Exception e) { System.err.println ("Unable to initialize MongoDB"); }
 	}
 
 	/** #friends this user has */
@@ -128,6 +127,13 @@ public class MongoUtils {
 		return needs.size();
 	}
 
+	public static void setScore(String id, int score)
+	{
+		DBCollection scores = db.getCollection("scores");		
+		BasicDBObject update = new BasicDBObject().append("$set", new BasicDBObject().append("score", score)); /* set score to score */
+		scores.findAndModify(new BasicDBObject().append("id", id), new BasicDBObject() /* fields */, new BasicDBObject() /* sort */, false /* remove */, update, false /* return new */, true /* upsert */);
+	}
+	
 	/* automatically clears previous needs */
 	public static void addNeeds(String id, String[] codes) throws UnknownHostException, MongoException
 	{
@@ -162,7 +168,7 @@ public class MongoUtils {
 
 		// read all my friends' locs
 		Set<String> friends = readFieldFromCollForSelector("friends", "f1", id, "f2");
-		friends.addAll(readFieldFromCollForSelector("friends", "f2", id, "f1"));
+	//	friends.addAll(readFieldFromCollForSelector("friends", "f2", id, "f1"));
 		
 		List<PersonInfo> list = new ArrayList<PersonInfo>();
 		PersonInfo me = PersonInfo.computePersonInfo(id);
@@ -181,6 +187,22 @@ public class MongoUtils {
 		return list;
 	}
 	
+	/** returns top n people with the highest scores, in descending order */
+	public static List<Pair<String, Integer>> globalLeaderboard(int n)
+	{
+		DBCursor cursor = db.getCollection("scores").find().sort(new BasicDBObject( "score" , -1)); // sort scores in descending order of score
+		int count = 0;
+		List<Pair<String, Integer>> result = new ArrayList<Pair<String, Integer>>();
+		while (cursor.hasNext() && count < n)
+		{
+			DBObject o = cursor.next();
+			result.add(new Pair<String, Integer>((String) o.get("id"), (Integer) o.get("score")));
+			count++;
+		}
+		return result;
+	}
+	
+	
 	public static void wipeDataForId(String id)
 	{
 		log.info ("wiping data for id " + id);
@@ -190,6 +212,7 @@ public class MongoUtils {
 		db.getCollection("needs").remove(o);
 		db.getCollection("locations").remove(o);
 		db.getCollection("names").remove(o);
+		db.getCollection("scores").remove(o);
 		
 		json = "{'f1':'" + id + "'}"; // id has to be in quotes
 		o = (BasicDBObject) com.mongodb.util.JSON.parse(json);
@@ -239,6 +262,17 @@ public class MongoUtils {
 		return result;
 	}
 	
+	/* recomputes entire scores table -- expensive. returns # of people in the db */
+	public static int repopulateScores()
+	{
+		DBCollection friends = db.getCollection("friends");	
+		List<String> allIds = friends.distinct("f1"); // we assume this gives us all ids, i.e. there's no one with no friends #fragile
+		JSPHelper.log.info ("allIds size from friends table is " + allIds.size());
+		for (String id: allIds)
+			PersonInfo.computePersonInfo(id); // this will automatically populate the scores table
+		return allIds.size();
+	}
+
 	/** util function -- 
 	 * returns a set of strings in the retunrField for the given collection for the rows that match selectorField = selectorVal */
 	public static Set<String> readFieldFromCollForSelector(String coll, String selectorField, String selectorVal, String returnField)
@@ -257,4 +291,9 @@ public class MongoUtils {
 		return set;
 	}
 
+	public static void main(String args[])
+	{
+		// small test for setScore -- try db.scores.find() in the shell to see the update
+		setScore("abc", 12);
+	}
 }

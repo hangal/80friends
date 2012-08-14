@@ -65,12 +65,39 @@
 	int n_countries = p.allLocs.size();
 	String descr = n_countries + " " + (n_countries > 1 ? "countries":"country");
 	String message = "I am connected to " + descr + " through Facebook. What\\'s your score?";
+	
+	int MAX_TOP = 50; // this is the # of global leaders we will look up
+	List<Pair<String, Integer>> globalLeaders = MongoUtils.globalLeaderboard(MAX_TOP);
+	String globalLeaderName = "", globalLeaderId = "";
+	int globalLeaderScore = 0;
+	int my_rank = -1;
+	if (globalLeaders.size() > 0)
+	{
+		Pair<String, Integer> globalLeader = globalLeaders.get(0);
+		globalLeaderId = globalLeader.getFirst();
+		globalLeaderName = MongoUtils.getNameForId(id);
+		globalLeaderScore = globalLeader.getSecond();
+		// am i in the global leaders?
+		int rank = 0;
+		for (Pair<String, Integer> x: globalLeaders)
+		{
+			rank++;
+			if (x.getFirst().equals(id))
+				my_rank = rank;
+		}
+	}
+
 %>	
 <hr/>
 
 <div style="position:relative">
 <div style="float:left">
-	The global leader is <a href="http://www.facebook.com/leo.rong">Leo Rong</a> with 64 countries.
+	The global leader is <a href="http://www.facebook.com/<%=globalLeaderId%>"><%=globalLeaderName%></a> with connections to <%=globalLeaderScore %> countries.<br/>
+	<% if (my_rank > 0) { %>
+		You current global rank is #<%=my_rank%>.
+	<% } else { %>
+		You are currently not in the top #<%=MAX_TOP%> globally.
+	<% } %>
 </div>
 <div style="float:right;width:250px;">
 	<button class="after_flags" style="float:right;" onclick="create_invite()">Invite your friends&nbsp;&nbsp;&nbsp;&rarr;</button>

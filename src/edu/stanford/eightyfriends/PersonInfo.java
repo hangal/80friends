@@ -19,6 +19,7 @@ public class PersonInfo implements Comparable<PersonInfo>{
 	
 	private PersonInfo() { } // use factory method
 	
+	/* gets person info and also populates the score table for this id */
 	public static PersonInfo computePersonInfo(String id)
 	{
 		PersonInfo pi = new PersonInfo();
@@ -54,12 +55,20 @@ public class PersonInfo implements Comparable<PersonInfo>{
 				set.add(friendId);
 			}
 		}
-				
+
+		// always update scores table
+		MongoUtils.setScore(id, pi.getScore());
+		
 		return pi;
 	}
 	
 	public int compareTo (PersonInfo pi) {
-		return pi.allLocs.size() - allLocs.size(); 
+		return pi.getScore() - this.getScore(); 
+	}
+	
+	public int getScore()
+	{
+		return allLocs.size();
 	}
 	
 	public String toJson() {
