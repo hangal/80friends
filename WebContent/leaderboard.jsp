@@ -75,7 +75,7 @@
 	{
 		Pair<String, Integer> globalLeader = globalLeaders.get(0);
 		globalLeaderId = globalLeader.getFirst();
-		globalLeaderName = MongoUtils.getNameForId(id);
+		globalLeaderName = MongoUtils.getNameForId(globalLeaderId);
 		globalLeaderScore = globalLeader.getSecond();
 		// am i in the global leaders?
 		int rank = 0;
