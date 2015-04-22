@@ -1,18 +1,11 @@
 80 friends is an app that challenges people to make friends from as many countries as they can. 
 
-You can check and visually see on a map how many countries your friends list covers (based on their place of birth or place of current stay).
-You can see a leaderboard (global or just among your friends) of the maximum number of countries covered. 
+You can check and visually see on a map how many countries your friends list covers (based on their place of birth or place of current stay). You can see a leaderboard (global or just among your friends) of the maximum number of countries covered. 
 
-You can also register to make friends with people from countries where you do not currently have a friend. 
-When somebody from that country needs a reciprocal friend, your names will be suggested to each other and 
-you can decide whether to friend them. 
+You can also register to make friends with people from countries where you do not currently have a friend.  When somebody from that country needs a reciprocal friend, your names will be suggested to each other and you can decide whether to friend them. 
 
 Deployment:
-Run ant to build build/war/80friends.war
-which can be deployed in any servlet container.
-Mongodb must be running on the same machine.
+Run ant to build build/war/80friends.war which can be deployed in any servlet container. Mongodb must be running on the same machine.
 
 History:
-Initially built at the Hack for Change hackathon in San Francisco.
-Inspired by my Pakistani Facebook friend (a former Stanford student) whose feed provides a more personal and organic 
-view of Pakistan news than what's reported in mainstream media.
+Initially built at the Hack for Change hackathon in San Francisco. Inspired by my Pakistani Facebook friend (a former Stanford student) whose feed provides a more personal and organic view of Pakistan news than what's reported in mainstream media.
